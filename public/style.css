@@ -1,0 +1,494 @@
+/* =========================================================
+   Invento Pro - Full Stylesheet (updated for readable dark theme)
+   ========================================================= */
+
+/* 1. RESET & THEME VARIABLES */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  scroll-behavior: smooth;
+  height: 100%;
+}
+
+:root {
+  /* Light mode */
+  --bg-main: #f3f4f6;
+  --bg-elevated: #ffffff;
+  --bg-soft: #f9fafb;
+
+  --text-main: #2f52a3;
+  --text-muted: #6b7280;
+
+  --border-color: #e5e7eb;
+
+  --accent: #2563eb;
+  --accent-strong: #1d4ed8;
+  --accent-soft: rgba(37, 99, 235, 0.12);
+
+  --danger: #ef4444;
+  --danger-soft: rgba(239, 68, 68, 0.08);
+
+  --input-bg: #ffffff;
+  --input-border: #cbd5e1;
+  --input-border-focus: #2563eb;
+
+  --shadow-soft: 0 14px 40px rgba(15, 23, 42, 0.12);
+
+  /* overlay opacity to control how visible the background is */
+  --overlay-opacity-dark: 0.45;
+  --overlay-opacity-light: 0.45;
+}
+
+/* Improved dark theme variables for readable UI */
+:root[data-theme="dark"] {
+  --bg-main: #08101a;        /* main page tint under overlay */
+  --bg-elevated: #0f1724;    /* cards/panels */
+  --bg-soft: #111827;        /* headers / input backgrounds */
+
+  --text-main: #eef2f7;      /* primary text - near white */
+  --text-muted: #9aa6b8;     /* muted text - soft pale blue/gray */
+
+  --border-color: #243241;   /* visible but subtle border */
+  --input-border: #243241;
+  --input-bg: #0b1220;
+
+  --accent: #3b82f6;
+  --accent-strong: #2563eb;
+  --accent-soft: rgba(59, 130, 246, 0.22);
+
+  --danger: #f97373;
+  --danger-soft: rgba(248, 113, 113, 0.18);
+
+  --shadow-soft: 0 18px 48px rgba(0, 0, 0, 0.65);
+
+  --overlay-opacity-dark: 0.45;
+  --overlay-opacity-light: 0.25;
+}
+
+/* 2. GLOBAL BASE + BACKGROUND IMAGE */
+html, body { height: 100%; margin: 0; }
+
+body {
+  font-family: system-ui, -apple-system, "SF Pro Text", "Segoe UI", BlinkMacSystemFont, sans-serif;
+  color: var(--text-main);
+  background-image: url('/images/warehouse-bg.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-color: var(--bg-main);
+  position: relative;
+  transition: background-color 200ms ease;
+}
+
+/* ===== Softer overlay for auth pages ===== */
+.auth-wrapper::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.25);
+  z-index: 0;
+  pointer-events: none;
+}
+
+:root[data-theme="dark"] .auth-wrapper::before {
+  background: rgba(0, 0, 0, 0.35);
+}
+
+/* overlay to darken/lighten the background image for readability */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  transition: background 220ms ease;
+  background: rgba(0,0,0,var(--overlay-opacity-dark));
+}
+
+/* light theme overlay */
+:root[data-theme="light"] body::before {
+  background: rgba(255,255,255,var(--overlay-opacity-light));
+  --overlay-opacity-light: 0.005;
+}
+
+/* ensure important containers sit above overlay */
+.app, .auth-wrapper, .auth-card, .panel, .table-wrapper, .catalog-grid {
+  position: relative;
+  z-index: 1;
+}
+
+/* remove underlines */
+a, a:link, a:visited, a:hover, a:active {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* page container */
+.app {
+  max-width: 1200px;
+  margin: 12px auto;
+  padding: 18px 16px 32px;
+}
+
+/* utilities */
+.muted { color: var(--text-muted); }
+.small { font-size: 0.78rem; }
+
+/* 3. HEADER & NAV */
+.app-header-bar {
+  display: grid;
+  grid-template-columns: auto auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.app-brand { display:flex; flex-direction:column; gap:3px; }
+.app-title-row { display:flex; align-items:center; gap:8px; }
+.app-title { font-size:1.7rem; font-weight:800; color: var(--text-main); }
+.app-badge {
+  font-size:0.65rem; text-transform:uppercase; letter-spacing:0.08em;
+  padding:2px 6px; border-radius:999px; background: var(--bg-soft);
+  border:1px solid var(--border-color); color: var(--text-muted);
+}
+.app-tagline { margin:0; font-size:0.86rem; color:var(--text-muted); }
+
+/* header right */
+.app-header-right { display:flex; align-items:center; gap:10px; }
+
+/* icon button */
+.icon-btn {
+  display:inline-flex; align-items:center; justify-content:center;
+  border-radius:999px; border:1px solid var(--border-color);
+  background:var(--bg-elevated); padding:6px 8px; font-size:0.9rem;
+  box-shadow: var(--shadow-soft);
+}
+
+/* nav */
+.main-nav {
+  display:inline-flex; align-items:center; gap:8px; padding:6px 9px;
+  border-radius:999px; background: linear-gradient(135deg, rgba(255,255,255,0.92), rgba(226,232,240,0.64));
+  border: 1px solid rgba(148,163,184,0.55);
+  box-shadow: 0 12px 28px rgba(15,23,42,0.12);
+}
+
+/* dark nav adjustments */
+:root[data-theme="dark"] .main-nav {
+  background: linear-gradient(135deg, rgba(17,24,39,0.6), rgba(17,24,39,0.6));
+  border-color: #1f2a3a;
+}
+
+.nav-link {
+  position:relative; border-radius:999px; padding:8px 16px; font-size:0.84rem; font-weight:600; letter-spacing:0.01em;
+  white-space:nowrap; transition: transform .15s ease, background .15s ease, color .12s ease;
+  color: #1e3a8a;
+}
+:root[data-theme="dark"] .nav-link { color: var(--text-main); opacity: 0.92; }
+
+.nav-link:hover { transform: translateY(-1px); background: rgba(148,163,184,0.12); }
+
+.nav-link.active {
+  background: var(--accent);
+  color:#fff;
+  box-shadow: 0 10px 30px rgba(37,99,235,0.45);
+}
+
+/* mobile nav toggle */
+.nav-toggle { display:none; border:none; border-radius:999px; padding:6px 8px; background:linear-gradient(135deg,var(--accent),var(--accent-strong)); cursor:pointer; }
+.nav-toggle span{ display:block; width:16px; height:2px; border-radius:999px; background:#fff; margin:3px 0; }
+
+/* 4. USER MENU */
+.user-menu { position:relative; }
+.user-menu-btn {
+  display:flex; align-items:center; gap:8px; padding:6px 10px; border-radius:999px;
+  border:1px solid var(--border-color); background:var(--bg-elevated); cursor:pointer;
+  box-shadow: var(--shadow-soft);
+}
+.user-avatar { width:28px; height:28px; border-radius:999px; display:inline-flex; align-items:center; justify-content:center; background:#e0e7ff; color:#1e3a8a; font-weight:700; }
+.user-menu-dropdown {
+  position:absolute; top:calc(100% + 8px); right:0; min-width:220px; background:var(--bg-elevated);
+  border-radius:16px; border:1px solid var(--border-color); padding:10px; box-shadow: var(--shadow-soft); display:none; z-index:50;
+}
+.user-menu-dropdown.open { display:block; }
+
+/* 5. MAIN LAYOUT & PANELS */
+.app-main { display:flex; flex-direction:column; gap:16px; }
+
+.panel {
+  border-radius:24px;
+  padding:18px;
+  background:var(--bg-elevated);
+  border:1px solid var(--border-color);
+  box-shadow: var(--shadow-soft);
+}
+:root[data-theme="dark"] .panel { background: var(--bg-elevated); }
+
+/* header text contrast */
+.panel-header h2 { margin:0 0 8px; font-size:1.25rem; color: var(--text-main); }
+
+/* 6. FORMS */
+.form-row { display:grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap:10px; margin-bottom:10px; }
+.form-group { display:flex; flex-direction:column; gap:6px; min-width:0; }
+.form-group label { font-size:0.78rem; color:var(--text-muted); }
+
+/* inputs: ensure high contrast text and visible placeholders in dark mode */
+input, select, textarea {
+  font-family: inherit;
+  font-size:0.93rem;
+  padding:10px 12px;
+  border-radius:12px;
+  border:1px solid var(--input-border);
+  background: var(--input-bg);
+  color: var(--text-main);
+  outline:none;
+  transition: border .15s ease, box-shadow .15s ease, background .15s ease;
+}
+
+/* explicit placeholders */
+input::placeholder, textarea::placeholder {
+  color: rgba(255,255,255,0.45);
+}
+:root:not([data-theme="dark"]) input::placeholder, :root:not([data-theme="dark"]) textarea::placeholder {
+  color: #9ca3af;
+}
+
+/* focus */
+input:focus, select:focus, textarea:focus { border-color: var(--input-border-focus); box-shadow: 0 0 0 1px var(--accent-soft); }
+
+/* input backgrounds for light/dark */
+:root[data-theme="dark"] input,
+:root[data-theme="dark"] select,
+:root[data-theme="dark"] textarea {
+  background: var(--input-bg);
+  color: var(--text-main);
+  border: 1px solid var(--input-border);
+}
+
+/* error styles */
+.field-error { color: var(--danger); font-size:0.78rem; margin-top:4px; }
+.input-error { border-color: #f97373 !important; box-shadow: 0 0 0 1px rgba(249,115,115,0.18); }
+
+/* 7. BUTTONS */
+button { font-family: inherit; border: none; cursor:pointer; }
+button:disabled { opacity:0.6; cursor:default; }
+
+button[type="submit"],
+button:not(.secondary):not(.icon-btn):not(.password-toggle):not(.user-menu-btn):not(.user-menu-link) {
+  padding:9px 18px; border-radius:999px; font-size:0.92rem; font-weight:600;
+  background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+  color:#fff; box-shadow: 0 12px 30px rgba(37,99,235,0.54);
+}
+button[type="submit"]:hover { transform: translateY(-1px); filter:brightness(1.03); }
+
+button.secondary {
+  padding:9px 16px; border-radius:999px; background:#eef2ff; color:#111827; border:1px solid #d4ddff;
+}
+:root[data-theme="dark"] button.secondary { background:#0b1220; color:var(--text-main); border-color:var(--border-color); }
+
+/* block button */
+.block-btn { display:inline-block; text-align:center; padding:8px 12px; border-radius:999px; }
+
+/* 8. TABLES */
+.table-wrapper {
+  width:100%;
+  overflow-x:auto;
+  border-radius:16px;
+  border:1px solid var(--border-color);
+  background:var(--bg-elevated);
+}
+
+table {
+  width:100%;
+  border-collapse:collapse;
+  font-size:0.88rem;
+  color: var(--text-main);
+}
+
+thead { background: var(--bg-soft); }
+th, td { padding:10px 12px; text-align:left; vertical-align:middle; }
+th { font-weight:700; color:var(--text-muted); border-bottom:1px solid var(--border-color); font-size:0.86rem; }
+tbody tr:nth-child(even) { background: rgba(0,0,0,0.03); }
+:root[data-theme="dark"] tbody tr:nth-child(even) { background: rgba(255,255,255,0.02); }
+
+/* ensure table text visible in dark */
+:root[data-theme="dark"] table, :root[data-theme="dark"] th, :root[data-theme="dark"] td {
+  color: var(--text-main);
+}
+
+/* low stock */
+.low-stock { background: var(--danger-soft); }
+.low-stock td:nth-child(5) { font-weight:700; color:var(--danger); }
+
+/* action buttons */
+.action-btn { padding:6px 10px; border-radius:999px; font-size:0.8rem; }
+
+/* 9. STATS */
+.stats { margin-top:10px; display:grid; grid-template-columns:repeat(auto-fit, minmax(130px,1fr)); gap:8px; }
+.stat { padding:8px 10px; border-radius:12px; border:1px solid var(--border-color); background:#f1f5ff; color:var(--text-main); }
+:root[data-theme="dark"] .stat { background: #0b1220; color: var(--text-main); }
+
+/* 10. CATALOG GRID */
+.catalog-grid { margin-top:12px; display:grid; grid-template-columns:repeat(auto-fit, minmax(190px,1fr)); gap:12px; }
+.catalog-card { background:var(--bg-elevated); border-radius:16px; border:1px solid var(--border-color); overflow:hidden; box-shadow:var(--shadow-soft); display:flex; flex-direction:column; }
+.catalog-card img { width:100%; height:140px; object-fit:cover; display:block; }
+.catalog-content { padding:10px; color: var(--text-main); }
+
+/* 11. BILLING SUMMARY */
+.billing-summary { margin-top:10px; display:flex; flex-wrap:wrap; gap:10px; }
+.billing-summary > div { flex:1; min-width:140px; padding:9px 11px; border-radius:12px; border:1px solid var(--border-color); background:var(--bg-soft); }
+
+/* 12. AUTH (LOGIN/SIGNUP) */
+.auth-wrapper { min-height:100vh; display:flex; align-items:center; justify-content:center; padding:18px; }
+.auth-card {
+  width:100%;
+  max-width:420px;
+  padding:20px 18px 22px;
+  border-radius:18px;
+  background: rgba(255,255,255,0.92);
+  border: 1px solid rgba(255,255,255,0.06);
+  box-shadow: 0 20px 48px rgba(2,6,23,0.18);
+  backdrop-filter: blur(6px) saturate(1.05);
+}
+:root[data-theme="dark"] .auth-card {
+  background: rgba(8, 12, 24, 0.85); /* darker glass */
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.85);
+  color: #e5e7eb;
+}
+
+.auth-logo { width:75px; height:auto; object-fit:contain; }
+.auth-logo-text { font-size:1.4rem; font-weight:800; margin:0; color:var(--text-main); }
+
+/* password toggle */
+.password-wrapper { position:relative; display:flex; align-items:center; }
+.password-wrapper input { width:100%; padding-right:60px; }
+.password-toggle {
+  position:absolute; right:6px; top:50%; transform:translateY(-50%);
+  padding:4px 8px; border-radius:999px; border:1px solid var(--border-color); background:var(--bg-soft); color:var(--text-muted); cursor:pointer;
+}
+
+/* alerts */
+.alert { border-radius:10px; padding:8px 10px; font-size:0.86rem; margin-bottom:8px; }
+.alert.success { background:#ecfdf5; border:1px solid #bbf7d0; color:#15803d; }
+.alert.error { background:#fef2f2; border:1px solid #fecaca; color:#b91c1c; }
+
+/* 13. RESPONSIVE */
+@media (max-width: 840px) {
+  .app-header-bar { grid-template-columns: auto auto auto; grid-template-rows: auto auto; }
+  .app-brand { grid-column: 1 / 3; }
+  .app-header-right { justify-self:end; }
+  .main-nav { justify-self:center; }
+}
+
+@media (max-width: 640px) {
+  .nav-toggle { display:inline-flex; }
+  .main-nav { display:none; width:100%; margin-top:6px; border-radius:18px; justify-content:flex-start; flex-wrap:wrap; }
+  .main-nav.open { display:flex; }
+  .nav-link { flex:1 1 50%; text-align:center; }
+  .auth-card { padding:16px; }
+}
+
+@media (max-width: 480px) {
+  .app { padding:12px; }
+  .auth-card { padding:16px; border-radius:14px; }
+}
+
+/* 14. SMALL FIXES TO FORCE CONTRAST (if any theme leakage) */
+h1,h2,h3,h4,h5,h6 { color: var(--text-main); }
+label, th, td, p, li, .muted, .small { color: var(--text-main); }
+:root:not([data-theme="dark"]) .muted { color: var(--text-muted); }
+:root[data-theme="dark"] .muted { color: var(--text-muted); opacity: 0.95; }
+
+:root[data-theme="dark"] .auth-card input {
+  background: #020617;
+  color: #f8fafc;
+  border: 1px solid #334155;
+}
+
+:root[data-theme="dark"] .auth-card input::placeholder {
+  color: #94a3b8;
+}
+
+.auth-logo-text {
+  color: #0f172a; 
+}
+
+
+:root[data-theme="dark"] .auth-logo-text {
+  color: #ffffff;               
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.85);
+}
+
+/* =========================================================
+   LOGO VISIBILITY FIX (NO DESIGN CHANGE)
+   ========================================================= */
+
+/* Ensure logo is always above overlays */
+.auth-logo {
+  position: relative;
+  z-index: 3;
+  display: block;
+  height: auto;
+
+  /* Force browser to render transparent PNG correctly */
+  image-rendering: auto;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+/* Slight shadow ONLY to separate from background (invisible effect) */
+.auth-logo {
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.45));
+}
+
+/* Dark mode needs extra contrast for transparent logos */
+:root[data-theme="dark"] .auth-logo {
+  filter: drop-shadow(0 4px 14px rgba(255, 255, 255, 0.15))
+          drop-shadow(0 2px 8px rgba(0, 0, 0, 0.85));
+}
+
+/* Ensure logo container is never under overlays */
+.auth-wrapper,
+.auth-card {
+  position: relative;
+  z-index: 2;
+}
+/* =========================================
+   LOGO VISIBILITY + STACKING FIX (SAFE)
+   ========================================= */
+
+/* Ensure logo container is always above overlays */
+.auth-logo-container {
+  position: relative;
+  z-index: 5;
+  text-align: center;
+}
+
+/* Force logo to render clearly */
+.auth-logo {
+  display: block;
+  width: 120px;
+  height: auto;
+  margin: 0 auto 6px;
+  opacity: 1;
+  visibility: visible;
+  z-index: 6;
+  position: relative;
+
+  /* Prevent blend/blur issues */
+  mix-blend-mode: normal;
+  filter: none;
+}
+
+/* Dark mode: subtle contrast lift for transparent logos */
+:root[data-theme="dark"] .auth-logo {
+  filter: drop-shadow(0 2px 10px rgba(255, 255, 255, 0.35));
+}
+/* End of stylesheet */

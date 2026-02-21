@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title><%= appName %> — Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <div class="app">
+      <!-- Top bar with logo + nav -->
+      <header class="app-header app-header-bar">
+        <div class="app-header-left">
+          <div class="app-logo-block">
+            <h1><%= appName %></h1>
+            <p>Smart inventory, catalog & billing for your business.</p>
+          </div>
+        </div>
+
+        <nav class="main-nav">
+          <a href="#inventory-section" class="nav-link">Inventory</a>
+          <a href="#catalog-section" class="nav-link">Catalog</a>
+          <a href="#billing-section" class="nav-link">Billing</a>
+        </nav>
+
+        <div class="app-header-right">
+          <!-- Light / Dark mode toggle -->
+          <button type="button" id="theme-toggle" class="secondary small">
+            Toggle theme
+          </button>
+
+          <!-- User credentials pill -->
+          <div class="user-credential">
+            <div class="user-credential-name">
+              👤 <%= user.displayName %>
+            </div>
+            <div class="user-credential-meta">
+              <% if (user.email) { %>
+                <span><%= user.email %></span>
+              <% } %>
+              <% if (user.phone) { %>
+                <span><%= user.phone %></span>
+              <% } %>
+            </div>
+          </div>
+
+          <!-- Logout -->
+          <form method="POST" action="/logout" style="display: inline">
+            <button type="submit" class="secondary small">Logout</button>
+          </form>
+        </div>
+      </header>
+
+      <main class="app-main">
+        <!-- ========== INVENTORY SECTION ========== -->
+        <section id="inventory-section" class="panel">
+          <h2>Inventory</h2>
+          <form id="item-form" autocomplete="off">
+            <!-- Hidden field for editing -->
+            <input type="hidden" id="item-id" />
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="item-name">Item Name</label>
+                <input
+                  type="text"
+                  id="item-name"
+                  placeholder="e.g. Wireless Mouse"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="item-sku">SKU / Code</label>
+                <input
+                  type="text"
+                  id="item-sku"
+                  placeholder="e.g. WM-1001"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="item-category">Category</label>
+                <input
+                  type="text"
+                  id="item-category"
+                  placeholder="e.g. Electronics"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="item-qty">Quantity</label>
+                <input
+                  type="number"
+                  id="item-qty"
+                  min="0"
+                  step="1"
+                  placeholder="e.g. 10"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="item-price">Base Price (per unit)</label>
+                <input
+                  type="number"
+                  id="item-price"
+                  min="0"
+                  step="0.01"
+                  placeholder="e.g. 499.99"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="item-gst">GST %</label>
+                <input
+                  type="number"
+                  id="item-gst"
+                  min="0"
+                  step="0.01"
+                  placeholder="e.g. 18"
+                />
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" id="submit-btn">Add Item</button>
+              <button type="button" id="reset-btn" class="secondary">
+                Clear Form
+              </button>
+            </div>
+          </form>
+        </section>
+
+        <section class="panel">
+          <h2>Search & Filter</h2>
+          <div class="filter-row">
+            <div class="form-group">
+              <label for="search-input">Search (Name / SKU)</label>
+              <input
+                type="text"
+                id="search-input"
+                placeholder="Type to search..."
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="filter-category">Category</label>
+              <select id="filter-category">
+                <option value="all">All Categories</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>&nbsp;</label>
+              <button type="button" id="export-btn" class="secondary">
+                Export CSV
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-header">
+            <h2>Inventory List</h2>
+            <span id="empty-state" class="muted">
+              No items yet. Add your first item above.
+            </span>
+          </div>
+
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Name</th>
+                  <th>SKU</th>
+                  <th>Category</th>
+                  <th>Qty</th>
+                  <th>Base Price</th>
+                  <th>GST %</th>
+                  <th>Price + GST</th>
+                  <th>Total (incl GST)</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="inventory-body">
+                <!-- Rows injected via JS -->
+              </tbody>
+            </table>
+          </div>
+
+          <div class="stats">
+            <div class="stat">
+              <span class="stat-label">Total Items</span>
+              <span class="stat-value" id="stat-items">0</span>
+            </div>
+            <div class="stat">
+              <span class="stat-label">Total Quantity</span>
+              <span class="stat-value" id="stat-qty">0</span>
+            </div>
+            <div class="stat">
+              <span class="stat-label">Total Value (incl GST)</span>
+              <span class="stat-value" id="stat-value">0.00</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- ========== CATALOG SECTION ========== -->
+        <section id="catalog-section" class="panel">
+          <h2>Catalog (Product Cards)</h2>
+
+          <!-- Catalog form -->
+          <form id="catalog-form" autocomplete="off">
+            <input type="hidden" id="catalog-id" />
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="catalog-name">Catalog Product Name</label>
+                <input
+                  type="text"
+                  id="catalog-name"
+                  placeholder="Name to show in catalog"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="catalog-sku">Linked SKU (from Inventory)</label>
+                <input
+                  type="text"
+                  id="catalog-sku"
+                  placeholder="Must match an inventory SKU"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="catalog-qty">Quantity</label>
+                <input
+                  type="number"
+                  id="catalog-qty"
+                  min="1"
+                  step="1"
+                  value="1"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="catalog-image">Image URL</label>
+                <input
+                  type="url"
+                  id="catalog-image"
+                  placeholder="https://example.com/image.jpg"
+                />
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" id="catalog-submit-btn">
+                Add to Catalog
+              </button>
+              <button type="button" id="catalog-reset-btn" class="secondary">
+                Clear Catalog Form
+              </button>
+            </div>
+          </form>
+
+          <!-- Catalog grid -->
+          <div class="catalog-grid" id="catalog-grid">
+            <!-- Catalog cards rendered here -->
+          </div>
+        </section>
+
+        <!-- ========== BILLING SECTION ========== -->
+        <section id="billing-section" class="panel">
+          <h2>Billing</h2>
+
+          <!-- Billing form -->
+          <form id="billing-form" autocomplete="off">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="bill-customer-name">Customer Name</label>
+                <input
+                  type="text"
+                  id="bill-customer-name"
+                  placeholder="e.g. Rahul Sharma"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="bill-customer-phone">Customer Phone</label>
+                <input
+                  type="tel"
+                  id="bill-customer-phone"
+                  placeholder="10-digit phone"
+                />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="bill-sku">SKU</label>
+                <input
+                  type="text"
+                  id="bill-sku"
+                  placeholder="Inventory SKU, e.g. WM-1001"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="bill-qty">Quantity</label>
+                <input
+                  type="number"
+                  id="bill-qty"
+                  min="1"
+                  step="1"
+                  value="1"
+                />
+              </div>
+
+              <div class="form-group">
+                <label>&nbsp;</label>
+                <button
+                  type="button"
+                  id="bill-add-item"
+                  class="secondary"
+                >
+                  Add Item to Bill
+                </button>
+              </div>
+            </div>
+          </form>
+
+          <!-- Current bill items -->
+          <div class="table-wrapper" style="margin-top: 10px">
+            <table>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>SKU</th>
+                  <th>Name</th>
+                  <th>Qty</th>
+                  <th>Unit Price</th>
+                  <th>GST %</th>
+                  <th>Unit + GST</th>
+                  <th>Line Total</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="billing-body">
+                <!-- Bill rows via JS -->
+              </tbody>
+            </table>
+          </div>
+
+          <div class="billing-summary">
+            <div>
+              <div class="billing-summary-label">Subtotal</div>
+              <div class="billing-summary-value" id="billing-subtotal">
+                ₹0.00
+              </div>
+            </div>
+            <div>
+              <div class="billing-summary-label">Total GST</div>
+              <div class="billing-summary-value" id="billing-gst">
+                ₹0.00
+              </div>
+            </div>
+            <div>
+              <div class="billing-summary-label">Grand Total</div>
+              <div class="billing-summary-value" id="billing-grand">
+                ₹0.00
+              </div>
+            </div>
+          </div>
+
+          <div class="form-actions" style="margin-top: 10px">
+            <button type="button" id="billing-save-btn">
+              Save Bill &amp; Update Inventory
+            </button>
+            <button type="button" id="billing-clear-btn" class="secondary">
+              Clear Bill
+            </button>
+          </div>
+
+          <p class="muted" style="margin-top: 6px; font-size: 0.75rem">
+            Note: Inventory quantities will be reduced only when you click
+            <b>Save Bill &amp; Update Inventory</b>.
+          </p>
+        </section>
+      </main>
+    </div>
+
+    <script src="/theme.js"></script>
+    <script src="/index.js"></script>
+  </body>
+</html>

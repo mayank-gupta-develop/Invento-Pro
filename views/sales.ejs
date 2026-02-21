@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title><%= appName %> — Sales Report</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <div class="app">
+      <!-- Header / Navbar -->
+      <header class="app-header app-header-bar">
+        <!-- Brand -->
+        <div class="app-brand">
+          <div class="app-title-row">
+            <span class="app-title"><%= appName %></span>
+            <span class="app-badge">Dashboard</span>
+          </div>
+          <p class="app-tagline">
+            Daily sales overview with filters by customer, product, and location.
+          </p>
+        </div>
+
+        <!-- Mobile nav toggle -->
+        <button
+          type="button"
+          class="nav-toggle"
+          id="nav-toggle"
+          aria-label="Toggle navigation"
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
+        <!-- Main nav (added Sales link here) -->
+        <nav class="main-nav" id="main-nav">
+          <a href="/inventory" class="nav-link">Inventory</a>
+          <a href="/catalog" class="nav-link">Catalog</a>
+          <a href="/billing" class="nav-link">Billing</a>
+          <a href="/bills" class="nav-link">Bills</a>
+          <a href="/sales-report" class="nav-link active">Sales</a>
+        </nav>
+
+        <!-- Right side: theme + user -->
+        <div class="app-header-right">
+          <button
+  type="button"
+  id="theme-toggle"
+  class="icon-btn small"
+  aria-label="Toggle theme"
+>
+  🌓
+</button>
+
+          <div class="user-menu">
+            <button
+              type="button"
+              class="user-menu-btn"
+              id="user-menu-btn"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              <span class="user-avatar">
+                <%= (user.name || user.username || 'U').charAt(0).toUpperCase() %>
+              </span>
+              <div class="user-menu-meta">
+                <span class="user-menu-name">
+                  <%= user.name || user.username %>
+                </span>
+                <% if (user.username) { %>
+                <span class="user-menu-username">@<%= user.username %></span>
+                <% } %>
+              </div>
+            </button>
+
+            <div class="user-menu-dropdown" id="user-menu-dropdown">
+              <div class="user-menu-section">
+                <% if (user.email) { %>
+                <div class="user-menu-row">
+                  <span class="user-menu-icon">📧</span>
+                  <span class="user-menu-text"><%= user.email %></span>
+                </div>
+                <% } %>
+                <% if (user.phone) { %>
+                <div class="user-menu-row">
+                  <span class="user-menu-icon">📱</span>
+                  <span class="user-menu-text"><%= user.phone %></span>
+                </div>
+                <% } %>
+              </div>
+
+              <div class="user-menu-section user-menu-section-actions">
+                <form method="POST" action="/logout">
+                  <button
+                    type="submit"
+                    class="user-menu-link user-menu-logout"
+                  >
+                    Log out
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Main content -->
+      <main class="app-main">
+        <section class="panel">
+          <div class="panel-header">
+            <h2>Sales Report</h2>
+            <p class="muted small">
+              Select a date and sort the sales lines by customer, product, or location.
+            </p>
+          </div>
+
+          <!-- Filter form -->
+          <form
+            method="GET"
+            action="/sales-report"
+            style="margin-bottom: 10px;"
+            autocomplete="off"
+          >
+            <div class="form-row">
+              <div class="form-group">
+                <label for="date">Date</label>
+                <input
+                  type="date"
+                  id="date"
+                  name="date"
+                  value="<%= queryDate || '' %>"
+                />
+              </div>
+              <div class="form-group">
+                <label for="sort">Sort by</label>
+                <select id="sort" name="sort">
+                  <option value="" <%= !sort ? 'selected' : '' %>>
+                    Date &amp; Bill
+                  </option>
+                  <option value="customer" <%= sort === 'customer' ? 'selected' : '' %>>
+                    Customer
+                  </option>
+                  <option value="product" <%= sort === 'product' ? 'selected' : '' %>>
+                    Product
+                  </option>
+                  <option value="location" <%= sort === 'location' ? 'selected' : '' %>>
+                    Location
+                  </option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>&nbsp;</label>
+                <button type="submit">Apply</button>
+              </div>
+            </div>
+          </form>
+
+          <!-- Summary cards -->
+          <div class="billing-summary">
+            <div>
+              <div class="billing-summary-label">Bills in selection</div>
+              <div class="billing-summary-value">
+                <%= summary.billsCount %>
+              </div>
+            </div>
+            <div>
+              <div class="billing-summary-label">Subtotal (before GST)</div>
+              <div class="billing-summary-value">
+                ₹<%= summary.subtotal.toFixed(2) %>
+              </div>
+            </div>
+            <div>
+              <div class="billing-summary-label">Total GST</div>
+              <div class="billing-summary-value">
+                ₹<%= summary.totalGST.toFixed(2) %>
+              </div>
+            </div>
+            <div>
+              <div class="billing-summary-label">Grand Total</div>
+              <div class="billing-summary-value">
+                ₹<%= summary.totalGrand.toFixed(2) %>
+              </div>
+            </div>
+          </div>
+
+          <!-- Lines table -->
+          <div class="table-wrapper" style="margin-top: 12px;">
+            <table>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Bill No.</th>
+                  <th>Date &amp; Time</th>
+                  <th>Customer</th>
+                  <th>Phone</th>
+                  <th>Location</th>
+                  <th>Customer GST</th>
+                  <th>Product</th>
+                  <th>SKU</th>
+                  <th>Qty</th>
+                  <th>Line Total</th>
+                  <th>Bill Grand Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% if (lineItems && lineItems.length > 0) { %>
+                  <% lineItems.forEach(function(row, index) { %>
+                  <tr>
+                    <td><%= index + 1 %></td>
+                    <td><%= row.billNumber %></td>
+                    <td>
+                      <% if (row.date) { %>
+                      <%= new Date(row.date).toLocaleString('en-IN', {
+                        dateStyle: 'short',
+                        timeStyle: 'short'
+                      }) %>
+                      <% } else { %>-<% } %>
+                    </td>
+                    <td><%= row.customerName || '-' %></td>
+                    <td><%= row.customerPhone || '-' %></td>
+                    <td><%= row.customerLocation || '-' %></td>
+                    <td><%= row.customerGST || '-' %></td>
+                    <td><%= row.productName || '-' %></td>
+                    <td><%= row.sku || '-' %></td>
+                    <td><%= row.qty %></td>
+                    <td>₹<%= (row.lineTotal || 0).toFixed(2) %></td>
+                    <td>₹<%= (row.billGrandTotal || 0).toFixed(2) %></td>
+                  </tr>
+                  <% }) %>
+                <% } else { %>
+                  <tr>
+                    <td colspan="12" id="bills-empty">
+                      No sales found for the selected criteria.
+                      <% if (!queryDate) { %>
+                        Try choosing a specific date above.
+                      <% } %>
+                    </td>
+                  </tr>
+                <% } %>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+
+        <!-- Theme + header behaviour (inline, guaranteed to run) -->
+    <script>
+      (function () {
+        const root = document.documentElement;
+        const storedTheme = window.localStorage.getItem("invento-theme");
+
+        // Apply stored theme on load
+        if (storedTheme === "dark" || storedTheme === "light") {
+          root.setAttribute("data-theme", storedTheme);
+        }
+
+        const applyTheme = (next) => {
+          root.setAttribute("data-theme", next);
+          window.localStorage.setItem("invento-theme", next);
+        };
+
+        // Hook header button
+        const themeBtn = document.getElementById("theme-toggle");
+        if (themeBtn) {
+          themeBtn.addEventListener("click", () => {
+            const current = root.getAttribute("data-theme") || "light";
+            const next = current === "dark" ? "light" : "dark";
+            applyTheme(next);
+          });
+        }
+
+        // Mobile nav + user menu (kept here so it's always active)
+        const navToggle = document.getElementById("nav-toggle");
+        const mainNav = document.getElementById("main-nav");
+        const userMenuBtn = document.getElementById("user-menu-btn");
+        const userMenuDropdown = document.getElementById("user-menu-dropdown");
+
+        if (navToggle && mainNav) {
+          navToggle.addEventListener("click", (e) => {
+            e.stopPropagation();
+            mainNav.classList.toggle("open");
+            navToggle.classList.toggle("open");
+          });
+
+          document.addEventListener("click", () => {
+            mainNav.classList.remove("open");
+            navToggle.classList.remove("open");
+          });
+
+          mainNav.addEventListener("click", (e) => e.stopPropagation());
+        }
+
+        if (userMenuBtn && userMenuDropdown) {
+          userMenuBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            const isOpen = userMenuDropdown.classList.contains("open");
+            document
+              .querySelectorAll(".user-menu-dropdown.open")
+              .forEach((el) => el.classList.remove("open"));
+            if (!isOpen) userMenuDropdown.classList.add("open");
+          });
+
+          document.addEventListener("click", () => {
+            userMenuDropdown.classList.remove("open");
+          });
+        }
+      })();
+    </script>
+
+    <!-- Your main dashboard JS (inventory/catalog/billing logic) -->
+    <script src="/index.js"></script>
+    <script src="/theme.js"></script>
+  </body>
+</html>

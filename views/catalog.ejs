@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title><%= appName %> — Catalog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <div class="app">
+      <!-- Navbar -->
+      <header class="app-header app-header-bar">
+        <div class="app-header-left">
+          <div class="app-logo-block">
+  <h1><%= appName %></h1>
+  <p>Smart inventory, catalog & billing for your business.</p>
+</div>
+        </div>
+
+        <nav class="main-nav">
+          <a href="/inventory" class="nav-link">Inventory</a>
+          <a href="/catalog" class="nav-link active">Catalog</a>
+          <a href="/billing" class="nav-link">Billing</a>
+          <a href="/bills" class="nav-link">Bills</a>
+          <a href="/sales" class="nav-link">Sales</a>
+        </nav>
+
+        <div class="app-header-right">
+          <button type="button" id="theme-toggle" class="secondary small">
+            Toggle theme
+          </button>
+
+          <div class="user-credential">
+            <div class="user-credential-name">
+              👤 <%= user.displayName %>
+            </div>
+            <div class="user-credential-meta">
+              <% if (user.email) { %>
+                <span><%= user.email %></span>
+              <% } %>
+              <% if (user.phone) { %>
+                <span><%= user.phone %></span>
+              <% } %>
+            </div>
+          </div>
+
+          <form method="POST" action="/logout" style="display: inline">
+            <button type="submit" class="secondary small">Logout</button>
+          </form>
+        </div>
+      </header>
+
+      <main class="app-main">
+        <section class="panel">
+          <h2>Catalog (Product Cards)</h2>
+
+          <!-- Catalog form -->
+          <form id="catalog-form" autocomplete="off">
+            <input type="hidden" id="catalog-id" />
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="catalog-name">Catalog Product Name</label>
+                <input
+                  type="text"
+                  id="catalog-name"
+                  placeholder="Name to show in catalog"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="catalog-sku">Linked SKU (from Inventory)</label>
+                <input
+                  type="text"
+                  id="catalog-sku"
+                  placeholder="Must match an inventory SKU"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="catalog-qty">Quantity</label>
+                <input
+                  type="number"
+                  id="catalog-qty"
+                  min="1"
+                  step="1"
+                  value="1"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="catalog-image">Image URL</label>
+                <input
+                  type="url"
+                  id="catalog-image"
+                  placeholder="https://example.com/image.jpg"
+                />
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" id="catalog-submit-btn">
+                Add to Catalog
+              </button>
+              <button type="button" id="catalog-reset-btn" class="secondary">
+                Clear Catalog Form
+              </button>
+            </div>
+          </form>
+
+          <!-- Catalog grid -->
+          <div class="catalog-grid" id="catalog-grid">
+            <!-- Catalog cards rendered here by JS -->
+          </div>
+        </section>
+      </main>
+    </div>
+
+        <!-- Theme + header behaviour (inline, guaranteed to run) -->
+    <script>
+      (function () {
+        const root = document.documentElement;
+        const storedTheme = window.localStorage.getItem("invento-theme");
+
+        // Apply stored theme on load
+        if (storedTheme === "dark" || storedTheme === "light") {
+          root.setAttribute("data-theme", storedTheme);
+        }
+
+        const applyTheme = (next) => {
+          root.setAttribute("data-theme", next);
+          window.localStorage.setItem("invento-theme", next);
+        };
+
+        // Hook header button
+        const themeBtn = document.getElementById("theme-toggle");
+        if (themeBtn) {
+          themeBtn.addEventListener("click", () => {
+            const current = root.getAttribute("data-theme") || "light";
+            const next = current === "dark" ? "light" : "dark";
+            applyTheme(next);
+          });
+        }
+
+        // Mobile nav + user menu (kept here so it's always active)
+        const navToggle = document.getElementById("nav-toggle");
+        const mainNav = document.getElementById("main-nav");
+        const userMenuBtn = document.getElementById("user-menu-btn");
+        const userMenuDropdown = document.getElementById("user-menu-dropdown");
+
+        if (navToggle && mainNav) {
+          navToggle.addEventListener("click", (e) => {
+            e.stopPropagation();
+            mainNav.classList.toggle("open");
+            navToggle.classList.toggle("open");
+          });
+
+          document.addEventListener("click", () => {
+            mainNav.classList.remove("open");
+            navToggle.classList.remove("open");
+          });
+
+          mainNav.addEventListener("click", (e) => e.stopPropagation());
+        }
+
+        if (userMenuBtn && userMenuDropdown) {
+          userMenuBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            const isOpen = userMenuDropdown.classList.contains("open");
+            document
+              .querySelectorAll(".user-menu-dropdown.open")
+              .forEach((el) => el.classList.remove("open"));
+            if (!isOpen) userMenuDropdown.classList.add("open");
+          });
+
+          document.addEventListener("click", () => {
+            userMenuDropdown.classList.remove("open");
+          });
+        }
+      })();
+    </script>
+
+    <!-- Your main dashboard JS (inventory/catalog/billing logic) -->
+    <script src="/index.js"></script>
+    <script src="/theme.js"></script>
+  </body>
+</html>
