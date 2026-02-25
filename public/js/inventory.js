@@ -99,8 +99,7 @@ function renderInventory() {
     const gstVal = Number(i.gst || 0);
     const qtyVal = Number(i.qty || 0);
 
-    const selling = purchase + purchase * (gstVal / 100);
-    const profit = (mrpVal - selling) * qtyVal;
+    const { selling, profit } = calc(i);
 
     body.insertAdjacentHTML(
       "beforeend",

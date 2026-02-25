@@ -29,7 +29,7 @@
   color: var(--text-muted);
 }
 .header-actions {
-  grid-column: -1;          /* ⬅ force last column */
+  grid-column: -1;          
   justify-self: end;
   display: flex;
   align-items: center;

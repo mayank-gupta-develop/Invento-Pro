@@ -52,7 +52,7 @@ body {
 
   --shadow-soft: 0 14px 40px rgba(15, 23, 42, 0.12);
 
-  --overlay-opacity-light: 0.04;
+  --overlay-opacity-light: 0.25;
   --overlay-opacity-dark: 0.05;
 }
 
@@ -80,7 +80,7 @@ body {
   --shadow-soft: 0 18px 48px rgba(0, 0, 0, 0.65);
 
   --overlay-opacity-light: 0.25;
-  --overlay-opacity-dark: 0.75;
+  --overlay-opacity-dark: 0.25;
 }
 
 /* ---------------- BACKGROUND IMAGE + OVERLAY ---------------- */
@@ -117,17 +117,24 @@ body::before {
 }
 
 /* ---------------- AUTH BACKGROUND OVERLAY ---------------- */
+/* Auth page overlay – theme aware */
 .auth-wrapper::before {
   content: "";
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.75);
   pointer-events: none;
   z-index: 0;
+  transition: background 200ms ease;
 }
 
+/* Light mode */
+:root[data-theme="light"] .auth-wrapper::before {
+  background: rgba(255, 255, 255, 0.55);
+}
+
+/* Dark mode */
 :root[data-theme="dark"] .auth-wrapper::before {
-  background: rgba(0, 0, 0, 0.35);
+  background: rgba(0, 0, 0, 0.75);
 }
 
 /* ---------------- LINKS ---------------- */
@@ -187,4 +194,9 @@ form,
 button {
   position: relative;
   z-index: 2;
+}
+
+.auth-wrapper body::before,
+body:has(.auth-wrapper)::before {
+  background: none;
 }

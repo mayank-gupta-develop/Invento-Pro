@@ -163,3 +163,6 @@
     font-size: 1.3rem;
   }
 }
+:root[data-theme="light"] .auth-card {
+  background: rgba(255, 255, 255, 0.96);
+}
