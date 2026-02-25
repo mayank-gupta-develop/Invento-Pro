@@ -1,135 +1,90 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <title><%= appName || 'Invento Pro' %> — Sign Up</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <link rel="stylesheet" href="/style.css" />
+  <meta charset="UTF-8" />
+  <title><%= appName %> — Sign Up</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/css/base.css" />
+  <link rel="stylesheet" href="/css/components.css" />
+  <link rel="stylesheet" href="/css/login-signup.css" />
 </head>
-<body class="auth-page">
+
+<body>
   <div class="auth-wrapper">
     <div class="auth-card">
-      <!-- Logo + title -->
+
+      <!-- Logo -->
       <div class="auth-logo-container">
-        <img src="/images/logo.png" alt="<%= appName %>" class="auth-logo" />
-        <h1 class="auth-logo-text"><%= appName || 'Invento Pro' %></h1>
-        <p class="muted small">Create your account to manage inventory, billing & sales.</p>
+        <img src="/images/logo.png" alt="Invento Pro" class="auth-logo" />
+        <h1 class="auth-logo-text"><%= appName %></h1>
+        <p class="auth-subtitle">Create your account</p>
       </div>
+      <button id="theme-toggle" class="icon-btn auth-theme">🌓</button>
 
-      <!-- Theme toggle -->
-      <div class="theme-toggle-auth" style="margin-bottom:8px;">
-        <button id="theme-toggle" class="icon-btn small" aria-label="Toggle theme">🌓</button>
-      </div>
-
-      <% if (serverError) { %>
-        <div class="alert error"><%= serverError %></div>
+      <!-- Errors -->
+      <% if (errors?.general) { %>
+        <div class="alert error"><%= errors.general %></div>
       <% } %>
 
-      <form method="POST" action="/signup" autocomplete="off" novalidate>
-        <!-- Username -->
+      <!-- Form -->
+      <form method="POST" action="/signup" autocomplete="off">
         <div class="form-group">
-          <label for="username">Username <span style="color:var(--danger)">*</span></label>
-          <input id="username" name="username" type="text" placeholder="Unique username" value="<%= (old && old.username) ? old.username : '' %>" required />
-          <% if (errors && errors.username) { %>
-            <div class="field-error"><%= errors.username %></div>
-          <% } %>
+          <label>Username</label>
+          <input name="username" placeholder="Choose a username" required />
         </div>
 
-        <!-- Name -->
         <div class="form-group">
-          <label for="name">Full name</label>
-          <input id="name" name="name" type="text" placeholder="Your full name" value="<%= (old && old.name) ? old.name : '' %>" />
+          <label>Email </label>
+          <input name="email" type="email" placeholder="Enter email" />
         </div>
 
-        <p class="muted small">Either <strong>email</strong> or <strong>phone</strong> is required.</p>
-
-        <!-- Email -->
         <div class="form-group">
-          <label for="email">Email</label>
-          <input id="email" name="email" type="email" placeholder="you@example.com" value="<%= (old && old.email) ? old.email : '' %>" />
-          <% if (errors && errors.email) { %>
-            <div class="field-error"><%= errors.email %></div>
-          <% } %>
+          <label>Phone </label>
+          <input name="phone" placeholder="Enter phone number" />
         </div>
 
-        <!-- Phone -->
         <div class="form-group">
-          <label for="phone">Phone</label>
-          <input id="phone" name="phone" type="tel" placeholder="9876543210" value="<%= (old && old.phone) ? old.phone : '' %>" />
-          <% if (errors && errors.phone) { %>
-            <div class="field-error"><%= errors.phone %></div>
-          <% } %>
-          <% if (errors && errors.contact) { %>
-            <div class="field-error"><%= errors.contact %></div>
-          <% } %>
-        </div>
-
-        <!-- Password -->
-        <div class="form-group password-group">
-          <label for="password">Password <span style="color:var(--danger)">*</span></label>
+          <label>Password</label>
           <div class="password-wrapper">
-            <input id="password" name="password" type="password" placeholder="At least 6 characters" required />
-            <button type="button" class="password-toggle" data-target="password">Show</button>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              placeholder="Create password"
+              required
+            />
+            <button
+              type="button"
+              class="password-toggle"
+              onclick="togglePassword()"
+            >
+              Show
+            </button>
           </div>
-          <% if (errors && errors.password) { %>
-            <div class="field-error"><%= errors.password %></div>
-          <% } %>
         </div>
+        <p class="muted small">
+  Minimum 10 characters, must include Atleast one letter and nine numbers or nine letters and one number
+</p>
 
-        <!-- Confirm Password -->
-        <div class="form-group password-group">
-          <label for="confirmPassword">Confirm password <span style="color:var(--danger)">*</span></label>
-          <div class="password-wrapper">
-            <input id="confirmPassword" name="confirmPassword" type="password" placeholder="Re-enter password" required />
-            <button type="button" class="password-toggle" data-target="confirmPassword">Show</button>
-          </div>
-          <% if (errors && errors.confirmPassword) { %>
-            <div class="field-error"><%= errors.confirmPassword %></div>
-          <% } %>
-        </div>
-
-        <div class="form-actions">
-          <button type="submit">Create Account</button>
-          <a class="block-btn secondary" href="/login" style="display:inline-block; padding:9px 14px; margin-left:8px;">Go to Login</a>
-        </div>
+        <button type="submit">Create Account</button>
       </form>
 
-      <div class="auth-divider"><span>or</span></div>
-      <div class="auth-extra-actions">
-        <!-- additional actions -->
+      <!-- Footer -->
+      <div class="auth-footer">
+        Already have an account?
+        <a href="/login">Login</a>
       </div>
     </div>
   </div>
 
   <script>
-    (function(){
-      const root = document.documentElement;
-      const stored = window.localStorage.getItem('invento-theme');
-      if (stored === 'dark' || stored === 'light') root.setAttribute('data-theme', stored);
-
-      const applyTheme = (t) => {
-        root.setAttribute('data-theme', t);
-        window.localStorage.setItem('invento-theme', t);
-      };
-
-      const themeBtn = document.getElementById('theme-toggle');
-      if (themeBtn) themeBtn.addEventListener('click', () => {
-        const cur = root.getAttribute('data-theme') || 'light';
-        applyTheme(cur === 'dark' ? 'light' : 'dark');
-      });
-
-      // Password toggles
-      document.querySelectorAll('.password-toggle').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const targetId = btn.getAttribute('data-target');
-          const input = document.getElementById(targetId);
-          if (!input) return;
-          const isPwd = input.type === 'password';
-          input.type = isPwd ? 'text' : 'password';
-          btn.textContent = isPwd ? 'Hide' : 'Show';
-        });
-      });
-    })();
+    function togglePassword() {
+      const input = document.getElementById("password");
+      input.type = input.type === "password" ? "text" : "password";
+    }
   </script>
+  <script src="/js/theme.js"></script>
 </body>
 </html>

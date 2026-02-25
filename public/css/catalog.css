@@ -1,0 +1,135 @@
+/* =========================
+   Catalog Page Styles
+   ========================= */
+
+.catalog-section {
+  margin-top: 16px;
+}
+
+.catalog-section h3 {
+  margin-bottom: 10px;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+/* Grid */
+.catalog-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 14px;
+}
+
+/* Card */
+.catalog-card {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-color);
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: var(--shadow-soft);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Image */
+.catalog-card img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  display: block;
+}
+
+/* Image placeholder */
+.catalog-card .image-placeholder {
+  height: 140px;
+  background: linear-gradient(
+    135deg,
+    var(--accent),
+    var(--accent-strong)
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.catalog-card .image-placeholder button {
+  background: rgba(255,255,255,0.15);
+  border: 1px dashed rgba(255,255,255,0.6);
+  color: #fff;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Content */
+.catalog-content {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.catalog-content strong {
+  font-size: 0.95rem;
+}
+
+.catalog-content .meta {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.catalog-content input {
+  margin-top: 4px;
+}
+
+.catalog-content button.add-to-bill {
+  margin-top: 6px;
+  padding: 7px 14px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+}
+.image-wrapper {
+  position: relative;
+  height: 140px;
+  background: rgba(0,0,0,0.05);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.image-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  cursor: pointer;
+  display: block;
+  user-select: none;
+}
+
+/* 🗑 REMOVE BUTTON – FIXED */
+.remove-image {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  z-index: 3;
+
+  background: rgba(0,0,0,0.65);
+  color: #fff;
+  border: none;
+  border-radius: 0px;
+
+  width: 50px;
+  height: 50px;
+  line-height: 28px;
+  text-align: center;
+
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.remove-image:hover {
+  background: #ef4444;
+}

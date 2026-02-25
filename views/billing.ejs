@@ -1,327 +1,127 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title><%= appName %> — Billing</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="/style.css" />
-  </head>
-  <body>
-    <div class="app">
-      <!-- Header / Navbar -->
-      <header class="app-header app-header-bar">
-        <!-- Brand -->
-        <div class="app-brand">
-          <div class="app-title-row">
-            <span class="app-title"><%= appName %></span>
-            <span class="app-badge">Dashboard</span>
-          </div>
-          <p class="app-tagline">
-            Smart inventory, catalog & billing for your business.
-          </p>
-        </div>
+<head>
+  <meta charset="UTF-8" />
+  <title><%= appName %> — Billing</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-        <!-- Mobile nav toggle -->
-        <button
-          type="button"
-          class="nav-toggle"
-          id="nav-toggle"
-          aria-label="Toggle navigation"
-        >
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
+  <link rel="stylesheet" href="/css/base.css" />
+  <link rel="stylesheet" href="/css/components.css" />
+  <link rel="stylesheet" href="/css/billing.css" />
 
-        <!-- Nav -->
-        <nav class="main-nav" id="main-nav">
-          <a href="/inventory" class="nav-link">Inventory</a>
-          <a href="/catalog" class="nav-link">Catalog</a>
-          <a href="/billing" class="nav-link active">Billing</a>
-          <a href="/bills" class="nav-link">Bills</a>
-          <a href="/sales" class="nav-link">Sales</a>
-        </nav>
+  <style>
+    @media print {
+      body { background: #fff !important; }
+      .app-header-bar,
+      .add-row,
+      .form-actions,
+      #theme-toggle {
+        display: none !important;
+      }
 
-        <!-- Right side: theme + user -->
-        <div class="app-header-right">
-          <button
-  type="button"
-  id="theme-toggle"
-  class="icon-btn small"
-  aria-label="Toggle theme"
->
-  🌓
-</button>
+      .invoice {
+        box-shadow: none !important;
+        background: #fff !important;
+        border: 1px solid #000;
+      }
+    }
+    
+  </style>
+</head>
 
-          <div class="user-menu">
-            <button
-              type="button"
-              class="user-menu-btn"
-              id="user-menu-btn"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              <span class="user-avatar">
-                <%= (user.name || user.username || 'U').charAt(0).toUpperCase() %>
-              </span>
-              <div class="user-menu-meta">
-                <span class="user-menu-name">
-                  <%= user.name || user.username %>
-                </span>
-                <% if (user.username) { %>
-                <span class="user-menu-username">@<%= user.username %></span>
-                <% } %>
-              </div>
-            </button>
+<body>
+<div class="app">
 
-            <div class="user-menu-dropdown" id="user-menu-dropdown">
-              <div class="user-menu-section">
-                <% if (user.email) { %>
-                <div class="user-menu-row">
-                  <span class="user-menu-icon">📧</span>
-                  <span class="user-menu-text"><%= user.email %></span>
-                </div>
-                <% } %>
-                <% if (user.phone) { %>
-                <div class="user-menu-row">
-                  <span class="user-menu-icon">📱</span>
-                  <span class="user-menu-text"><%= user.phone %></span>
-                </div>
-                <% } %>
-              </div>
+<!-- ✅ CONSISTENT HEADER -->
+<header class="app-header-bar">
+  <div class="app-brand">
+    <span class="app-title"><%= appName %></span>
+    <p class="app-tagline">Smart billing & inventory</p>
+  </div>
 
-              <div class="user-menu-section user-menu-section-actions">
-                <form method="POST" action="/logout">
-                  <button
-                    type="submit"
-                    class="user-menu-link user-menu-logout"
-                  >
-                    Log out
-                  </button>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
+  <nav class="main-nav">
+    <a class="nav-link" href="/inventory">Inventory</a>
+    <a class="nav-link" href="/catalog">Catalog</a>
+    <a class="nav-link active" href="/billing">Billing</a>
+    <a class="nav-link" href="/bills">Bills</a>
+    <a class="nav-link" href="/sales">Sales</a>
+  </nav>
 
-      <!-- Main -->
-      <main class="app-main">
-        <section class="panel">
-          <div class="panel-header">
-            <h2>Billing</h2>
-            <p class="muted small">
-              Create invoices, capture customer details, and automatically
-              update inventory.
-            </p>
-          </div>
+  <div class="app-header-right">
+    <form method="POST" action="/logout">
+      <button type="submit" class="user-menu-btn">
+        <span class="user-avatar">
+          <%= (currentUser?.username || 'U').charAt(0).toUpperCase() %>
+        </span>
+        <span><%= currentUser?.username %></span>
+      </button>
+    </form>
+    <div class="header-actions">
+    <button id="theme-toggle">Dark Theme 🌙</button>
+  </div>
+  </div>
+</header>
 
-          <form id="billing-form" autocomplete="off">
-            <!-- Customer details row -->
-            <div class="form-row">
-              <div class="form-group">
-                <label for="bill-customer-name">Customer Name</label>
-                <input
-                  type="text"
-                  id="bill-customer-name"
-                  name="customerName"
-                  placeholder="Customer full name"
-                />
-              </div>
+<main class="app-main">
+<section class="panel invoice">
 
-              <div class="form-group">
-                <label for="bill-customer-phone">Customer Phone</label>
-                <input
-                  type="tel"
-                  id="bill-customer-phone"
-                  name="customerPhone"
-                  placeholder="10-digit phone"
-                />
-              </div>
+<h2 style="text-align:center">
+  GST TAX INVOICE
+</h2>
 
-              <div class="form-group">
-                <label for="bill-customer-location">Customer Location</label>
-                <input
-                  type="text"
-                  id="bill-customer-location"
-                  name="customerLocation"
-                  placeholder="City / State / Area"
-                />
-              </div>
+<div class="form-row">
+  <input id="cust-name" placeholder="Customer Name" required>
+<input id="cust-phone" placeholder="Phone" >
+  <input id="cust-gst" placeholder="GSTIN">
+</div>
 
-              <div class="form-group">
-                <label for="bill-customer-gst">Customer GST</label>
-                <input
-                  type="text"
-                  id="bill-customer-gst"
-                  name="customerGST"
-                  placeholder="Customer GSTIN (optional)"
-                />
-              </div>
-            </div>
+<div class="form-row">
+  <input id="cust-address" placeholder="Address">
+</div>
 
-            <!-- Line item entry -->
-            <div class="form-row">
-              <div class="form-group">
-                <label for="bill-sku">Item SKU (from Inventory)</label>
-                <input
-                  type="text"
-                  id="bill-sku"
-                  placeholder="Exact SKU code"
-                />
-              </div>
-              <div class="form-group">
-                <label for="bill-qty">Quantity</label>
-                <input
-                  type="number"
-                  id="bill-qty"
-                  min="1"
-                  value="1"
-                  placeholder="1"
-                />
-              </div>
-              <div class="form-group">
-                <label>&nbsp;</label>
-                <button
-                  type="button"
-                  id="bill-add-item"
-                  class="btn-primary"
-                >
-                  Add Item to Bill
-                </button>
-              </div>
-            </div>
+<div class="form-row add-row">
+  <input id="bill-query" placeholder="Item name or SKU">
+  <input id="bill-qty" type="number" min="1" value="1">
+  <button id="add-item">Add Item</button>
+</div>
 
-            <!-- Current bill table -->
-            <div class="table-wrapper" style="margin-top: 10px;">
-              <table>
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>SKU</th>
-                    <th>Item Name</th>
-                    <th>Qty</th>
-                    <th>Base Price</th>
-                    <th>GST%</th>
-                    <th>Price + GST</th>
-                    <th>Line Total</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody id="billing-body"></tbody>
-              </table>
-            </div>
+<table>
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Item</th>
+      <th>SKU</th>
+      <th>Qty</th>
+      <th>Rate</th>
+      <th>GST%</th>
+      <th>Discount%</th>
+      <th>Total</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody id="bill-body"></tbody>
+</table>
 
-            <!-- Summary -->
-            <div class="billing-summary">
-              <div>
-                <div class="billing-summary-label">Subtotal (before GST)</div>
-                <div
-                  class="billing-summary-value"
-                  id="billing-subtotal"
-                >
-                  ₹0.00
-                </div>
-              </div>
-              <div>
-                <div class="billing-summary-label">Total GST</div>
-                <div class="billing-summary-value" id="billing-gst">₹0.00</div>
-              </div>
-              <div>
-                <div class="billing-summary-label">Grand Total</div>
-                <div
-                  class="billing-summary-value"
-                  id="billing-grand"
-                >
-                  ₹0.00
-                </div>
-              </div>
-            </div>
+<div class="billing-summary">
+  <div>Subtotal ₹<span id="sub">0.00</span></div>
+  <div>GST ₹<span id="gst">0.00</span></div>
+  <div>Discount ₹<span id="disc">0.00</span></div>
+  <div class="grand">Grand ₹<span id="grand">0.00</span></div>
+</div>
 
-            <!-- Actions -->
-            <div class="form-actions" style="margin-top: 14px;">
-              <button type="button" id="billing-save-btn">
-                Save Bill & Update Inventory
-              </button>
-              <button
-                type="button"
-                id="billing-clear-btn"
-                class="secondary"
-              >
-                Clear Current Bill
-              </button>
-            </div>
-          </form>
-        </section>
-      </main>
-    </div>
+<div class="form-actions">
+  <button id="save-print">Save & Print</button>
+  <button id="clear" class="secondary">Clear</button>
+</div>
 
-        <!-- Theme + header behaviour (inline, guaranteed to run) -->
-    <script>
-      (function () {
-        const root = document.documentElement;
-        const storedTheme = window.localStorage.getItem("invento-theme");
+<p style="text-align:center;margin-top:24px">Thank you for your business</p>
 
-        // Apply stored theme on load
-        if (storedTheme === "dark" || storedTheme === "light") {
-          root.setAttribute("data-theme", storedTheme);
-        }
+</section>
+</main>
+</div>
 
-        const applyTheme = (next) => {
-          root.setAttribute("data-theme", next);
-          window.localStorage.setItem("invento-theme", next);
-        };
-
-        // Hook header button
-        const themeBtn = document.getElementById("theme-toggle");
-        if (themeBtn) {
-          themeBtn.addEventListener("click", () => {
-            const current = root.getAttribute("data-theme") || "light";
-            const next = current === "dark" ? "light" : "dark";
-            applyTheme(next);
-          });
-        }
-
-        // Mobile nav + user menu (kept here so it's always active)
-        const navToggle = document.getElementById("nav-toggle");
-        const mainNav = document.getElementById("main-nav");
-        const userMenuBtn = document.getElementById("user-menu-btn");
-        const userMenuDropdown = document.getElementById("user-menu-dropdown");
-
-        if (navToggle && mainNav) {
-          navToggle.addEventListener("click", (e) => {
-            e.stopPropagation();
-            mainNav.classList.toggle("open");
-            navToggle.classList.toggle("open");
-          });
-
-          document.addEventListener("click", () => {
-            mainNav.classList.remove("open");
-            navToggle.classList.remove("open");
-          });
-
-          mainNav.addEventListener("click", (e) => e.stopPropagation());
-        }
-
-        if (userMenuBtn && userMenuDropdown) {
-          userMenuBtn.addEventListener("click", (e) => {
-            e.stopPropagation();
-            const isOpen = userMenuDropdown.classList.contains("open");
-            document
-              .querySelectorAll(".user-menu-dropdown.open")
-              .forEach((el) => el.classList.remove("open"));
-            if (!isOpen) userMenuDropdown.classList.add("open");
-          });
-
-          document.addEventListener("click", () => {
-            userMenuDropdown.classList.remove("open");
-          });
-        }
-      })();
-    </script>
-
-    <!-- Your main dashboard JS (inventory/catalog/billing logic) -->
-    <script src="/index.js"></script>
-    <script src="/theme.js"></script>
-  </body>
+<script>window.billItems = [];</script>
+<script src="/js/billing.js"></script>
+<script src="/js/theme.js"></script>
+</body>
 </html>

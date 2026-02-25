@@ -1,0 +1,28 @@
+.bills-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+#search {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  border-color: black;
+  background: var(--card);
+  color: var(--text);
+  min-width: 1000px;
+}
+
+.actions button {
+  margin-right: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.actions .danger {
+  background: #e54848;
+  color: #fff;
+}

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title><%= appName %> — Admin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+
+<body>
+<div class="app admin-app">
+
+<!-- ================= HEADER ================= -->
+<header class="app-header-bar">
+
+  <div class="app-brand">
+    <span class="app-title"><%= appName %></span>
+    <p class="app-tagline">Admin Control Panel</p>
+  </div>
+
+  <!-- USER + THEME -->
+ <div class="app-header-right">
+
+  <!-- USER BADGE -->
+  <div class="user-menu-btn">
+    <span class="user-avatar">
+      <%= currentUser.username.charAt(0).toUpperCase() %>
+    </span>
+    <span><%= currentUser.username %></span>
+  </div>
+
+  <!-- TERMINATE SESSION -->
+  <form method="POST" action="/logout">
+    <button
+      type="submit"
+      class="btn danger"
+      onclick="return confirm('Terminate admin session immediately?')">
+      LOGOUT
+    </button>
+  </form>
+
+  <!-- THEME -->
+  <button id="theme-toggle" class="icon-btn">🌓</button>
+
+</div>
+
+</header>
+
+<!-- ================= MAIN ================= -->
+<main class="app-main">
+
+  <!-- HEADER / STATS -->
+  <div class="admin-header">
+    <h2>Admin Dashboard</h2>
+    <p class="muted small">System overview & user management</p>
+  </div>
+  <div class="admin-controls">
+  <input
+    id="user-search"
+    placeholder="Search by username, email, or phone"
+  />
+
+  <div class="admin-actions">
+    <button id="print-users" class="secondary">Print</button>
+    <button id="export-users" class="secondary">Export CSV</button>
+  </div>
+</div>
+
+  <!-- USERS -->
+  <section class="panel admin-section">
+    <div class="panel-header">
+      <h3>Users</h3>
+      <p class="muted small">Total users: <%= users.length %></p>
+    </div>
+
+    <div class="table-wrapper">
+      <table class="admin-table">
+     <thead>
+  <tr>
+    <th>Username</th>
+    <th>Email</th>
+    <th>Phone No.</th>
+    <th>Terminate</th>
+    <th>Role</th>
+    <th>Action</th>
+  </tr>
+</thead>
+        <tbody id="user-table-body">
+<% users.forEach(u => { %>
+  <tr data-user-id="<%= u.id %>">
+    <td><%= u.username %></td>
+    <td><%= u.email || '-' %></td>
+<td><%= u.phone || '-' %></td>
+
+    <!-- TERMINATE USER -->
+    <td>
+      <% if (u.id !== currentUser.id) { %>
+        <button class="btn danger terminate-user">Terminate</button>
+      <% } else { %>
+        <span class="self-note">You</span>
+      <% } %>
+    </td>
+
+    <td class="role <%= u.role %>"><%= u.role %></td>
+
+    <td class="muted small">
+      <%= new Date().toLocaleDateString() %>
+    </td>
+  </tr>
+<% }) %>
+</tbody>
+      </table>
+    </div>
+  </section>
+
+</main>
+</div>
+
+<script src="/js/admin.js"></script>
+<script src="/js/theme.js"></script>
+</body>
+</html>

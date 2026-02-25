@@ -1,0 +1,72 @@
+/* =========================================================
+   GLOBAL PRINT STYLES — INVOICE / BILLS ONLY
+   ========================================================= */
+
+@media print {
+  #print-search {
+    display: inherit !important;
+  }
+}
+@media print {
+
+  /* Inventory pages handled by inventory.css */
+  #print-search {
+    visibility: inherit;
+  }
+
+  /* Hide app chrome */
+  header,
+  nav,
+  .app-header-bar,
+  .icon-btn,
+  #theme-toggle,
+  .no-print {
+    display: none !important;
+  }
+
+  body {
+    background: white;
+    color: black;
+  }
+
+  /* ================= INVOICE PRINT ================= */
+  .invoice-print,
+  .invoice-print * {
+    visibility: visible !important;
+  }
+
+  .invoice-print {
+    position: relative;
+    width: 210mm;
+    padding: 20mm;
+    margin: 0 auto;
+    background: white;
+    color: black;
+    font-size: 12px;
+  }
+
+  .invoice-print table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .invoice-print th,
+  .invoice-print td {
+    border: 1px solid #000;
+    padding: 6px;
+  }
+
+  .invoice-print th {
+    background: #f3f4f6;
+    font-weight: 600;
+  }
+
+  tr {
+    page-break-inside: avoid;
+  }
+}
+.header .right {
+  text-align: right;
+  line-height: 1.5;
+  font-size: 11px;
+}

@@ -1,0 +1,82 @@
+/* =========================================================
+   Invento Pro — INVENTORY PAGE STYLES
+   Scoped only to Inventory page
+   ========================================================= */
+
+/* ---------------- INVENTORY FORM ---------------- */
+#item-form {
+  margin-top: 4px;
+}
+
+#item-form .form-row {
+  gap: 12px;
+}
+
+#item-form input {
+  font-size: 0.92rem;
+}
+
+/* ---------------- INVENTORY TABLE ---------------- */
+#inventory-body tr td {
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+#inventory-body tr:hover {
+  background: rgba(37, 99, 235, 0.06);
+}
+
+/* Delete button */
+.delete-btn {
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  background: var(--danger-soft);
+  color: var(--danger);
+}
+
+.delete-btn:hover {
+  background: var(--danger);
+  color: #fff;
+}
+
+/* ---------------- EMPTY STATE ---------------- */
+#empty-state {
+  display: inline-block;
+  margin-top: 6px;
+  font-size: 0.85rem;
+}
+
+/* ---------------- SEARCH SECTION ---------------- */
+#search-empty {
+  font-size: 0.85rem;
+  padding-top: 6px;
+}
+
+/* ---------------- SEARCH TABLE ---------------- */
+#search-body tr:hover {
+  background: rgba(37, 99, 235, 0.05);
+}
+
+/* ---------------- SEARCH ACTION BUTTONS ---------------- */
+#search-actions {
+  display: flex;
+  gap: 10px;
+}
+
+/* ---------------- LOW STOCK ---------------- */
+.low-stock {
+  background: rgba(239, 68, 68, 0.08);
+}
+
+.low-stock td:nth-child(5) {
+  color: var(--danger);
+  font-weight: 700;
+}
+
+/* ---------------- HIGHLIGHT ---------------- */
+mark {
+  background: #fde68a;
+  padding: 0 2px;
+  border-radius: 2px;
+}

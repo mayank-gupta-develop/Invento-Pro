@@ -9,7 +9,7 @@
     const btn = document.getElementById("theme-toggle");
     if (btn) {
       btn.textContent =
-        theme === "dark" ? "Light Theme☀️" : "Dark Theme🌙 ";
+        theme === "dark" ? "Light Theme ☀️" : "Dark Theme 🌙 ";
     }
   }
 
@@ -18,7 +18,7 @@
     try {
       stored = localStorage.getItem(THEME_KEY);
     } catch (e) {
-      // localStorage might be blocked; ignore
+
     }
 
     const prefersDark =

@@ -1,26 +1,53 @@
 # Node.js
+
 node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Environment variables
+# Environment Variables
+
 .env
 
-# OS files
+# OS / System Files
+
 .DS_Store
 Thumbs.db
 
 # Editor / IDE
+
 .vscode/
 .idea/
 
-# Runtime data (your app generates these)
-data/*.json
+# Runtime / Local-only Data
 
-# Build artifacts (if any later)
+data/
+*.sqlite
+*.db
+
+# Uploads (Cloudinary used in prod)
+
+public/uploads/
+tmp/
+temp/
+
+# Build Artifacts
+
 dist/
 build/
 
+# Logs / Debug
 
-Invento Pro Presentation.pdf
+logs/
+*.log
+coverage/
+
+# Render / Deployment
+
+.render/
+.cache/
+
+# Misc
+
+*.swp
+*.swo

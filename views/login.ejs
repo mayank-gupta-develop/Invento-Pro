@@ -1,94 +1,85 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <title><%= appName || 'Invento Pro' %> — Login</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <link rel="stylesheet" href="/style.css" />
+  <meta charset="UTF-8" />
+  <title><%= appName %> — Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/css/base.css" />
+  <link rel="stylesheet" href="/css/components.css" />
+  <link rel="stylesheet" href="/css/login-signup.css" />
 </head>
-<body class="auth-page">
-  <div class="auth-wrapper">
-    <div class="auth-card">
-      <!-- Logo + title -->
-      <div class="auth-logo-container">
-        <!-- Put your logo at public/images/logo.png -->
-        <img src="/images/logo.png" alt="<%= appName %>" class="auth-logo" />
-        <h1 class="auth-logo-text"><%= appName || 'Invento Pro' %></h1>
-        <p class="muted small">Smart inventory, catalog & billing for your business.</p>
-      </div>
 
-      <!-- Theme toggle -->
-      <div class="theme-toggle-auth" style="margin-bottom:8px;">
-        <button id="theme-toggle" class="icon-btn small" aria-label="Toggle theme">🌓</button>
-      </div>
+<body class="auth-wrapper">
 
-      <!-- Server messages -->
-      <% if (registered) { %>
-        <div class="alert success">Account created. Please log in.</div>
-      <% } %>
-      <% if (error) { %>
-        <div class="alert error"><%= error %></div>
-      <% } %>
+  <div class="auth-card">
 
-      <!-- Login form -->
-      <form method="POST" action="/login" autocomplete="off" novalidate>
-        <div class="form-group">
-          <label for="identifier">Username / Email / Phone</label>
-          <input id="identifier" name="identifier" type="text" placeholder="username, email or phone" value="<%= typeof identifier !== 'undefined' ? identifier : '' %>" required />
-        </div>
-
-        <div class="form-group password-group">
-          <label for="password">Password</label>
-          <div class="password-wrapper">
-            <input id="password" name="password" type="password" placeholder="Your password" required />
-            <button type="button" class="password-toggle" data-target="password">Show</button>
-          </div>
-        </div>
-
-        <div class="form-actions" style="margin-top:12px;">
-          <button type="submit">Log in</button>
-          <a class="block-btn secondary" href="/signup" style="display:inline-block; padding:9px 14px; margin-left:8px;">Sign up</a>
-        </div>
-      </form>
-
-      <div class="auth-divider"><span>or</span></div>
-      <div class="auth-extra-actions">
-        <!-- Optional: add social sign-in links here -->
-        <a href="/signup" class="block-btn">Create an account</a>
-      </div>
+    <div class="auth-logo-container">
+      <img src="/images/logo.png" class="auth-logo" alt="Invento Pro" />
+      <h1 class="auth-logo-text"><%= appName %></h1>
+      <p class="auth-subtitle">Login to manage your inventory</p>
     </div>
+    <button id="theme-toggle" class="icon-btn auth-theme">🌓</button>
+
+    <% if (error) { %>
+      <div class="alert error"><%= error %></div>
+    <% } %>
+
+    <form method="POST" action="/login">
+
+      <div class="form-group">
+        <label>Username / Email / Phone</label>
+        <input
+          name="identifier"
+          placeholder="Enter username, email or phone"
+          required
+          autofocus
+        />
+      </div>
+
+      <div class="form-group">
+        <label>Password</label>
+        <div class="password-wrapper">
+          <input
+            type="password"
+            name="password"
+            placeholder="Enter password"
+            required
+          />
+          <button
+            type="button"
+            class="password-toggle"
+            onclick="togglePassword(this)"
+          >
+            Show
+          </button>
+        </div>
+      </div>
+
+      <button type="submit" style="width:100%; margin-top:12px;">
+        Login
+      </button>
+
+    </form>
+
+    <p class="small muted" style="text-align:center; margin-top:14px;">
+      Don’t have an account?
+      <a href="/signup" style="color:var(--accent); font-weight:600;">
+        Create one
+      </a>
+    </p>
+
   </div>
 
-  <!-- Inline script to guarantee theme toggle and password toggle work on auth pages -->
   <script>
-    (function(){
-      const root = document.documentElement;
-      const stored = window.localStorage.getItem('invento-theme');
-      if (stored === 'dark' || stored === 'light') root.setAttribute('data-theme', stored);
-
-      const applyTheme = (t) => {
-        root.setAttribute('data-theme', t);
-        window.localStorage.setItem('invento-theme', t);
-      };
-
-      const themeBtn = document.getElementById('theme-toggle');
-      if (themeBtn) themeBtn.addEventListener('click', () => {
-        const cur = root.getAttribute('data-theme') || 'light';
-        applyTheme(cur === 'dark' ? 'light' : 'dark');
-      });
-
-      // Password toggle(s)
-      document.querySelectorAll('.password-toggle').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const targetId = btn.getAttribute('data-target');
-          const input = document.getElementById(targetId);
-          if (!input) return;
-          const isPwd = input.type === 'password';
-          input.type = isPwd ? 'text' : 'password';
-          btn.textContent = isPwd ? 'Hide' : 'Show';
-        });
-      });
-    })();
+    function togglePassword(btn) {
+      const input = btn.previousElementSibling;
+      input.type = input.type === "password" ? "text" : "password";
+      btn.textContent = input.type === "password" ? "Show" : "Hide";
+    }
   </script>
+  <script src="/js/theme.js"></script>
+
 </body>
 </html>

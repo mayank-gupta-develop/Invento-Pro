@@ -1,0 +1,161 @@
+/* ================= SALES PAGE ================= */
+
+.sales-page .sales-filters {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+  align-items: center;
+}
+
+.sales-page .sales-filters input,
+.sales-page .sales-filters select,
+.sales-page .sales-filters button {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: none;
+}
+
+/* ================= SUMMARY ================= */
+
+.sales-page .sales-summary {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.sales-page .sales-summary div {
+  background: var(--panel-bg);
+  padding: 12px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.sales-page .sales-summary span {
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+.sales-page .sales-summary strong {
+  font-size: 18px;
+}
+
+/* ================= TABLE ================= */
+
+.sales-page .sales-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.sales-page .sales-table th,
+.sales-page .sales-table td {
+  padding: 8px;
+  font-size: 13px;
+  border-bottom: 1px solid rgba(255,255,255,0.15);
+}
+
+.sales-page .sales-table th {
+  text-align: left;
+  opacity: 0.75;
+}
+.app,
+.panel,
+.table-wrapper,
+form,
+button {
+  position: relative;
+  z-index: 2;
+}
+:root {
+  --panel-bg: rgba(255, 255, 255, 0.08);
+}
+
+:root[data-theme="light"] {
+  --panel-bg: rgba(255, 255, 255, 0.85);
+}
+.sales-page {
+  background: var(--bg-elevated);
+  border-radius: 14px;
+  padding: 18px;
+  box-shadow: var(--shadow-soft);
+}
+.sales-search {
+  min-width: 220px;
+}
+/* ================= SALES ACTIONS ================= */
+.sales-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.sales-actions .btn {
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #4f8cff, #3b6fe8);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  opacity: 0.9;
+}
+
+.btn-secondary {
+  background: rgba(255,255,255,0.08);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.15);
+}
+
+.btn-secondary:hover {
+  background: rgba(255,255,255,0.15);
+}
+@media print {
+  body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+
+  .app-header-bar,
+  .sales-filters,
+  .sales-actions {
+    display: none !important;
+  }
+
+  .panel {
+    box-shadow: none !important;
+    border: 1px solid #000;
+    padding: 20px;
+  }
+
+  h2 {
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+
+  th, td {
+    border: 1px solid #000 !important;
+    padding: 6px;
+    text-align: left;
+  }
+
+  thead {
+    background: #f2f2f2 !important;
+  }
+}

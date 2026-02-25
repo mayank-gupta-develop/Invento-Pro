@@ -1,0 +1,41 @@
+.billing-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.billing-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.invoice-no {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.billing-summary {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  padding: 14px;
+  border-radius: 12px;
+  background: var(--bg-elevated);
+}
+
+.billing-summary .grand {
+  font-size: 1.1rem;
+  font-weight: 800;
+}
+
+.billing-summary .profit {
+  color: #16a34a;
+}
+
+#bill-body button.danger {
+  background: #ef4444;
+  color: #fff;
+  border-radius: 999px;
+  padding: 4px 10px;
+}

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Users Report</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 24px;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    .meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      margin-bottom: 16px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    th, td {
+      border: 1px solid #000;
+      padding: 6px;
+      text-align: left;
+    }
+    th {
+      background: #eee;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Invento Pro — Admin Users</h1>
+
+<div class="meta">
+  <div>User: <%= currentUser.username %></div>
+  <div>Date: <%= new Date().toLocaleString() %></div>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Username</th>
+      <th>Email</th>
+      <th>Phone</th>
+      <th>Role</th>
+      <th>Created</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% users.forEach((u, i) => { %>
+      <tr>
+        <td><%= i + 1 %></td>
+        <td><%= u.username %></td>
+        <td><%= u.email || "-" %></td>
+        <td><%= u.phone || "-" %></td>
+        <td><%= u.role %></td>
+        <td><%= new Date().toLocaleDateString() %></td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>
+
+<script>
+  window.onload = function () {
+      window.print();
+    };
+    window.onafterprint = function () {
+      window.close();
+    };
+</script>
+
+</body>
+</html>
