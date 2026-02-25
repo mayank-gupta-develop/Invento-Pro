@@ -134,7 +134,7 @@ function renderInventory() {
 /* ================= ADD / UPDATE ITEM ================= */
 
 updateBtn.addEventListener("click", async () => {
-  // ✅ REQUIRED FIELD CHECK
+  // ✅ Validation
   if (
     !itemName.value.trim() ||
     !skuInput.value.trim() ||
@@ -144,17 +144,7 @@ updateBtn.addEventListener("click", async () => {
     !mrp.value ||
     gst.value === ""
   ) {
-    alert("❌ All fields are required. Please fill every box to continue.");
-    return;
-  }
-
-  if (Number(qtyInput.value) <= 0) {
-    alert("❌ Quantity must be greater than 0");
-    return;
-  }
-
-  if (Number(purchasePrice.value) <= 0 || Number(mrp.value) <= 0) {
-    alert("❌ Purchase price and MRP must be greater than 0");
+    alert("❌ All fields are required");
     return;
   }
 
@@ -169,12 +159,26 @@ updateBtn.addEventListener("click", async () => {
     show_in_catalog: showCatalog.checked ? 1 : 0,
   };
 
+  // 🔥 THIS WAS MISSING
+  const res = await fetch("/api/items", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "same-origin",
+    body: JSON.stringify(payload),
+  });
+
+  if (!res.ok) {
+    const err = await res.json();
+    alert(err.error || "Failed to add item");
+    return;
+  }
+
   form.reset();
   selectedItem = null;
+
   await fetchItems();
   renderInventory();
 });
-
 
 /* ================= RESET ================= */
 
