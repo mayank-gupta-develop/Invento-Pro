@@ -79,8 +79,8 @@ body {
 
   --shadow-soft: 0 18px 48px rgba(0, 0, 0, 0.65);
 
-  --overlay-opacity-light: 0.15;
-  --overlay-opacity-dark: 0.70;
+  --overlay-opacity-light: 0.25;
+  --overlay-opacity-dark: 0.75;
 }
 
 /* ---------------- BACKGROUND IMAGE + OVERLAY ---------------- */
@@ -127,7 +127,7 @@ body::before {
 }
 
 :root[data-theme="dark"] .auth-wrapper::before {
-  background: rgba(0, 0, 0, 0.50);
+  background: rgba(0, 0, 0, 0.35);
 }
 
 /* ---------------- LINKS ---------------- */
