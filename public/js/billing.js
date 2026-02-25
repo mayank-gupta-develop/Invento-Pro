@@ -155,13 +155,28 @@ document.getElementById("save-print").onclick = async () => {
     customer_address: custAddress.value,
     items
   };
+  const customerName = document.getElementById("customer-name").value.trim();
+const customerPhone = document.getElementById("customer-phone").value.trim();
+const customerGST = document.getElementById("customer-gst").value.trim();
+const customerAddress = document.getElementById("customer-address").value.trim();
 
-  const res = await fetch("/api/billing", {
-    credentials: "same-origin",
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload)
-  });
+// ✅ Only name mandatory
+if (!customerName) {
+  alert("Customer name is required");
+  return;
+}
+  await fetch("/api/billing", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    billId,
+    items,
+    customer_name: customerName,
+    customer_phone: customerPhone || null,
+    customer_gst: customerGST || null,
+    customer_address: customerAddress || null
+  })
+});
 
   if (!res.ok) {
     alert("Failed to save bill");

@@ -649,6 +649,9 @@ res.json(item);
 /* ===== CREATE / EDIT BILL ===== */
 
 app.post("/api/billing", requireAuth, async (req, res) => {
+  if (!req.body.customer_name || !req.body.customer_name.trim()) {
+  return res.status(400).json({ error: "Customer name is required" });
+}
   const { billId, items, customer_name, customer_phone, customer_gst, customer_address } = req.body;
 
   let subtotal = 0;
