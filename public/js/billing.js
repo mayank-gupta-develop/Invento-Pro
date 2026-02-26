@@ -147,48 +147,36 @@ document.getElementById("save-print").onclick = async () => {
     return;
   }
 
-  const payload = {
-    billId: currentBillId,
-    customer_name: custName.value,
-    customer_phone: custPhone.value,
-    customer_gst: custGST.value,
-    customer_address: custAddress.value,
-    items
-  };
-  const customerName = document.getElementById("customer-name").value.trim();
-const customerPhone = document.getElementById("customer-phone").value.trim();
-const customerGST = document.getElementById("customer-gst").value.trim();
-const customerAddress = document.getElementById("customer-address").value.trim();
+  const customerName = custName.value.trim();
+  if (!customerName) {
+    alert("Customer name is required");
+    return;
+  }
 
-// ✅ Only name mandatory
-if (!customerName) {
-  alert("Customer name is required");
-  return;
-}
-  await fetch("/api/billing", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({
-    billId,
-    items,
-    customer_name: customerName,
-    customer_phone: customerPhone || null,
-    customer_gst: customerGST || null,
-    customer_address: customerAddress || null
-  })
-});
+  const res = await fetch("/api/billing", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      billId: currentBillId,   // ✅ correct variable
+      customer_name: customerName,
+      customer_phone: custPhone.value.trim() || null,
+      customer_gst: custGST.value.trim() || null,
+      customer_address: custAddress.value.trim() || null,
+      items
+    })
+  });
 
   if (!res.ok) {
     alert("Failed to save bill");
     return;
   }
 
-  const { billId } = await res.json();
-  currentBillId = billId;
+  const data = await res.json();
+  currentBillId = data.billId;
 
   localStorage.removeItem("billItems");
 
-  window.open(`/billing/print/${billId}`, "_blank", "width=900,height=650");
+  window.open(`/billing/print/${data.billId}`, "_blank");
 };
 /* ================= CLEAR BUTTON ================= */
 document.getElementById("clear").onclick = () => {

@@ -47,12 +47,13 @@
   </nav>
 
   <div class="app-header-right">
-    <form method="POST" action="/logout">
-      <button type="submit" class="user-menu-btn">
+    <form id="logout-form" method="POST" action="/logout">
+      <button type="button" id="user-btn" class="user-menu-btn"
+        data-username="<%= currentUser?.username || 'User' %>">
         <span class="user-avatar">
-          <%= (currentUser?.username || 'U').charAt(0).toUpperCase() %>
+          <%= currentUser?.username?.charAt(0).toUpperCase() || "U" %>
         </span>
-        <span><%= currentUser?.username || 'User' %></span>
+        <span id="user-btn-text"><%= currentUser?.username || "User" %></span>
       </button>
     </form>
     <div class="header-actions">
@@ -131,11 +132,12 @@
 </table>
 <div class="sales-actions">
   <a
-    href="/sales/export?<%= new URLSearchParams(filters).toString() %>"
-    class="btn btn-secondary"
-  >
-    ⬇ Export CSV
-  </a>
+  id="export-csv-btn"
+  href="/sales/export?<%= new URLSearchParams(filters).toString() %>"
+  class="btn btn-secondary"
+>
+  ⬇ Export CSV
+</a>
 
   <button onclick="window.print()" class="btn btn-primary">
     🖨 Print Report
@@ -147,5 +149,6 @@
 
 <script src="/js/sales.js"></script>
 <script src="/js/theme.js"></script>
+<script src="/js/index.js"></script>
 </body>
 </html>

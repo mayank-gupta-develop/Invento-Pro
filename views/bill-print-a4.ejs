@@ -147,20 +147,21 @@
     </thead>
 
     <tbody>
-      <% items.forEach((i, idx) => {
-        const base = i.mrp * i.qty;
-        const disc = base * ((i.discount || 0) / 100);
-      %>
-        <tr>
-          <td><%= idx + 1 %></td>
-          <td><%= i.name %></td>
-          <td class="right"><%= i.qty %></td>
-          <td class="right">₹<%= i.mrp.toFixed(2) %></td>
-          <td class="right"><%= i.discount || 0 %>%</td>
-          <td class="right">₹<%= (base - disc).toFixed(2) %></td>
-        </tr>
-      <% }) %>
-    </tbody>
+  <% items.forEach((i, idx) => {
+    const base = i.mrp * i.qty;
+    const discount = base * ((i.discount || 0) / 100);
+    const rowTotal = base - discount;
+  %>
+    <tr>
+      <td><%= idx + 1 %></td>
+      <td><%= i.name %></td>
+      <td class="right"><%= i.qty %></td>
+      <td class="right">₹<%= i.mrp.toFixed(2) %></td>
+      <td class="right"><%= i.discount || 0 %>%</td>
+      <td class="right">₹<%= rowTotal.toFixed(2) %></td>
+    </tr>
+  <% }) %>
+</tbody>
   </table>
 
   <!-- ===== TOTAL ===== -->
@@ -189,7 +190,7 @@
 
   <tr>
     <td class="right"><strong>Grand Total</strong></td>
-    <td class="right"><strong>₹<%= totals.subtotal.toFixed(2) %></strong></td>
+    <td class="right"><strong>₹<%= totals.netTotal.toFixed(2) %></strong></td>
   </tr>
 </table>
 

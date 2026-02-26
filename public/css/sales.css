@@ -159,3 +159,20 @@ button {
     background: #f2f2f2 !important;
   }
 }
+/* ================= EXPORT CSV BUTTON (ISOLATED) ================= */
+
+#export-csv-btn {
+  background: transparent;
+  color: var(--accent);
+  border: 1.5px dashed var(--accent);
+}
+
+#export-csv-btn:hover {
+  background: var(--accent-soft);
+}
+
+/* Light theme visibility fix */
+:root[data-theme="light"] #export-csv-btn {
+  color: var(--accent);
+  border-color: var(--accent);
+}

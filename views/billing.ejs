@@ -48,12 +48,13 @@
   </nav>
 
   <div class="app-header-right">
-    <form method="POST" action="/logout">
-      <button type="submit" class="user-menu-btn">
+    <form id="logout-form" method="POST" action="/logout">
+      <button type="button" id="user-btn" class="user-menu-btn"
+        data-username="<%= currentUser?.username || 'User' %>">
         <span class="user-avatar">
-          <%= (currentUser?.username || 'U').charAt(0).toUpperCase() %>
+          <%= currentUser?.username?.charAt(0).toUpperCase() || "U" %>
         </span>
-        <span><%= currentUser?.username %></span>
+        <span id="user-btn-text"><%= currentUser?.username || "User" %></span>
       </button>
     </form>
     <div class="header-actions">
@@ -123,5 +124,6 @@
 <script>window.billItems = [];</script>
 <script src="/js/billing.js"></script>
 <script src="/js/theme.js"></script>
+<script src="/js/index.js"></script>
 </body>
 </html>

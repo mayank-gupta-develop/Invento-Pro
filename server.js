@@ -783,9 +783,9 @@ app.get("/billing/print/:id", requireAuth, async (req, res) => {
   }
 
   const netTotal = subtotal - discountTotal;
-  const cgst = gstTotal / 2;
-  const sgst = gstTotal / 2;
-  const grandTotal = netTotal + gstTotal;
+const cgst = gstTotal / 2;
+const sgst = gstTotal / 2;
+const grandTotal = netTotal;
 
   const template = items.length > 10 ? "bill-print-a4" : "bill-print-a5";
 

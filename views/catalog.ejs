@@ -29,21 +29,14 @@
 
   <div class="app-header-right">
     <form id="logout-form" method="POST" action="/logout">
-      <button
-        type="button"
-        id="user-btn"
-        class="user-menu-btn"
-        data-username="<%= currentUser?.username || 'User' %>"
-      >
+      <button type="button" id="user-btn" class="user-menu-btn"
+        data-username="<%= currentUser?.username || 'User' %>">
         <span class="user-avatar">
           <%= currentUser?.username?.charAt(0).toUpperCase() || "U" %>
         </span>
-        <span id="user-btn-text">
-          <%= currentUser?.username || "User" %>
-        </span>
+        <span id="user-btn-text"><%= currentUser?.username || "User" %></span>
       </button>
     </form>
-
     <div class="header-actions">
     <button id="theme-toggle">Dark Theme 🌙</button>
   </div>

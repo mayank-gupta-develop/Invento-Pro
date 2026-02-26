@@ -80,3 +80,86 @@ mark {
   padding: 0 2px;
   border-radius: 2px;
 }
+/* ================= PANEL SPACING ================= */
+
+/* Add spacing between inventory sections */
+.panel {
+  margin-bottom: 18px;
+}
+
+/* Remove extra space after last panel */
+.panel:last-child {
+  margin-bottom: 0;
+}
+/* ================= INVENTORY CHECKBOX ================= */
+
+/* Wrapper alignment (table + form) */
+#item-form input[type="checkbox"],
+#inventory-body input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+
+  border: 1.5px solid rgba(148, 163, 184, 0.8);
+  background: #fff;
+
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  transition:
+    background 120ms ease,
+    border-color 120ms ease,
+    box-shadow 120ms ease,
+    transform 80ms ease;
+}
+
+/* Hover */
+#item-form input[type="checkbox"]:hover,
+#inventory-body input[type="checkbox"]:hover {
+  border-color: var(--accent);
+}
+
+/* Checked state */
+#item-form input[type="checkbox"]:checked,
+#inventory-body input[type="checkbox"]:checked {
+  background: var(--accent);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.25);
+}
+
+/* Checkmark */
+#item-form input[type="checkbox"]:checked::after,
+#inventory-body input[type="checkbox"]:checked::after {
+  content: "✓";
+  font-size: 11px;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1;
+}
+
+/* Active click */
+#item-form input[type="checkbox"]:active,
+#inventory-body input[type="checkbox"]:active {
+  transform: scale(0.92);
+}
+
+/* Dark theme support */
+:root[data-theme="dark"] #item-form input[type="checkbox"],
+:root[data-theme="dark"] #inventory-body input[type="checkbox"] {
+  background: rgba(17, 24, 39, 0.9);
+  border-color: #334155;
+}
+
+:root[data-theme="dark"] 
+#item-form input[type="checkbox"]:checked,
+:root[data-theme="dark"] 
+#inventory-body input[type="checkbox"]:checked {
+  background: var(--accent);
+  border-color: var(--accent);
+}
