@@ -78,8 +78,6 @@ categoryInput.addEventListener("blur", autoFill);
 
 /* ================= INVENTORY RENDER ================= */
 
-/* ================= INVENTORY RENDER ================= */
-
 function renderInventory() {
   const body = document.getElementById("inventory-body");
   const empty = document.getElementById("empty-state");

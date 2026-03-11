@@ -15,14 +15,18 @@ import cloudinary from "./cloudinary.js";
 
 
 /* ================= SETUP ================= */
+
 console.log("DATABASE_URL =", process.env.DATABASE_URL);
+
 const { Pool } = pkg;
 
 const PgSession = pgSession(session);
 
+console.log("DATABASE_URL =", process.env.DATABASE_URL);
+
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: process.env.NODE_ENV === "production" ? { rejectUnauthorized: false } : false
+  ssl: { rejectUnauthorized: false }
 });
 
 const __filename = fileURLToPath(import.meta.url);
