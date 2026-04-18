@@ -102,17 +102,6 @@ export default function Login() {
                 {loading ? 'Signing in...' : 'Sign in'}
               </Button>
             </form>
-
-            <div className="my-6 flex items-center gap-4">
-              <div className="flex-1 h-px bg-border/50" />
-              <span className="text-xs text-muted-foreground">OR</span>
-              <div className="flex-1 h-px bg-border/50" />
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <Button variant="outline" className="border-border/50 hover:bg-muted/50">Google</Button>
-              <Button variant="outline" className="border-border/50 hover:bg-muted/50">GitHub</Button>
-            </div>
           </div>
         </motion.div>
       </div>
