@@ -3,8 +3,8 @@
   "private": true,
   "scripts": {
     "dev": "BROWSERSLIST_IGNORE_OLD_DATA=1 concurrently -n backend,frontend -c blue,green \"npm --prefix backend run dev\" \"npm --prefix frontend/unified-inventory-hub-main run dev\"",
-    "build":"npm --prefix frontend/unified-inventory-hub-main run build",
-    "postinstall":"npm --prefix backend install && npm --prefix frontend/unified-inventory-hub-main install",
+    "build":"npm --prefix frontend/unified-inventory-hub-main install --include=dev && npm --prefix frontend/unified-inventory-hub-main run build",
+    "postinstall":"npm --prefix backend install --include=dev && npm --prefix frontend/unified-inventory-hub-main install --include=dev",
     "start":"node server.js",
     "import":"node backend/import-sqlite.js"
   },
