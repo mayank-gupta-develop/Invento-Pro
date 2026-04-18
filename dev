@@ -1,0 +1,66 @@
+> concurrently "npm --prefix backend run dev" "npm --prefix frontend/unified-inventor
+> concurrently "npm --prefix backend run dev" "npm --prefix frontend/unified-inventory-hub-main run dev"
+
+[1] > vite_react_shadcn_ts@0.0.0 dev
+[1] > vite
+[1] 
+[0] 
+[0] > invento-pro@1.0.0 dev
+[0] > nodemon server.js
+[0] 
+[0] [nodemon] 3.1.11
+[0] [nodemon] to restart at any time, enter `rs`
+[0] [nodemon] watching path(s): server.js views/**/* public/**/* data/**/*
+[0] [nodemon] watching extensions: js,json,ejs
+[0] [nodemon] starting `node server.js server.js`
+[1] 
+[1]   VITE v5.4.19  ready in 99 ms
+[1] 
+[1]   ➜  Local:   http://localhost:8080/
+[1]   ➜  Network: http://192.168.31.179:8080/
+[0] [dotenv@17.3.1] injecting env (0) from ../.env -- tip: ⚙️  load multiple .env file
+[0] [dotenv@17.3.1] injecting env (0) from ../.env -- tip: ⚙️  load multiple .env files with { path: ['.env.local', '.env'] }
+[0] [dotenv@17.3.1] injecting env (0) from .e� prevent building .env in d
+[0] [dotenv@17.3.1] injectinenv (0) from .env -- tip: 🔐 prevent building .env in docker: https://dotenvx.com/prebuild
+[0] [dotenv@17.3.1] injecting env (0) from ../.env -- tip: ⚙️  specify custom .env fil
+[0] [dotenv@17.3.1] injecting env (0) from ../.env -- tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' }
+[0] [dotenv@17.3.1] injecting env (0) from .env -- tip: ⚙️  suppress all logs with { q
+[0] [dotenv@17.3.1] injecting env (0) from .env -- tip: ⚙️  suppress all logs with { quiet: true }
+[0] Postgres connected
+[0] ✅ Invento Pro running
+[0] 🌐 App URL: http://localhost:3000
+[0] /Users/mayank/Documents/web development projects/InventoPro 2 copy/backend/node_m
+[0] /Users/mayank/Documents/web development projects/InventoPro 2 copy/backend/node_modules/pg-pool/index.js:45
+[0]     Error.captureStackTrace(err)
+[0]           ^
+[0] 
+[0] error: column b.customer does not exist
+[0]     at /Users/mayank/Documents/web development projects/InventoPro 2 copy/backend
+[0]     at /Users/mayank/Documents/web development projects/InventoPro 2 copy/backend/node_modules/pg-pool/index.js:45:11
+[0]   cksAndRejections (node:internal/process/task_queues:105:5
+[0]     at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+[0]     at async file:///Users/mayank/Documents/web%20development%20projects/InventoP
+[0]     at async file:///Users/mayank/Documents/web%20development%20projects/InventoPro%202%20copy/backend/routes/sales.js:9:20 {
+[0]   length: 108,
+[0]   severity: 'ERROR',
+[0]   code: '42703',
+[0]   detail: undefined,
+[0]   hint: undefined,
+[0]   position: '14',
+[0]   internalPosition: undefined,
+[0]   internalQuery: undefined,
+[0]   where: undefined,
+[0]   schema: undefined,
+[0]   table: undefined,
+[0]   column: undefined,
+[0]   dataType: undefined,
+[0]   constraint: undefined,
+[0]   file: 'parse_relation.c',
+[0]   line: '3827',
+[0]   routine: 'errorMissingColumn'
+[0] }
+[0] 
+[0] Node.js v22.18.0
+[0] [nodemon] app crashed - waiting for file changes before starting...
+^C[1] npm --prefix frontend/unified-inventory-hub-main run dev exited with code SIGIN
+^C[1] npm --prefix frontend/unified-inventory-hub-main run dev exited with code SIGINT

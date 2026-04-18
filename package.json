@@ -1,28 +1,13 @@
 {
-  "name": "invento-pro",
-  "version": "1.0.0",
-  "type": "module",
-  "main": "server.js",
+  "name": "inventopro-monorepo",
+  "private": true,
   "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js"
-  },
-  "engines": {
-  "node": ">=18"
-},
-  "dependencies": {
-    "bcrypt": "^6.0.0",
-    "cloudinary": "^1.41.3",
-    "connect-pg-simple": "^10.0.0",
-    "dotenv": "^17.3.1",
-    "ejs": "^3.1.10",
-    "express": "^4.21.2",
-    "express-session": "^1.19.0",
-    "multer": "^2.0.2",
-    "pg": "^8.18.0",
-    "sharp": "^0.34.5"
+    "dev": "BROWSERSLIST_IGNORE_OLD_DATA=1 concurrently -n backend,frontend -c blue,green \"npm --prefix backend run dev\" \"npm --prefix frontend/unified-inventory-hub-main run dev\"",
+    "build":"npm --prefix frontend/unified-inventory-hub-main run build",
+    "start":"node backend/server.js",
+    "import":"node backend/import-sqlite.js"
   },
   "devDependencies": {
-    "nodemon": "^3.1.11"
+    "concurrently": "^9.0.1"
   }
 }

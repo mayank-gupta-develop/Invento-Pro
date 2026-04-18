@@ -1,248 +1,297 @@
-📦 Invento Pro
+# Invento Pro
 
-Invento Pro is a full-stack inventory, catalog, billing, and sales management web application built for small businesses and retail workflows.
+> **Enterprise-grade Inventory Management, Cataloging & Billing POS Platform**  
+> Built for small to medium businesses that demand accuracy, speed, and scale.
 
-It focuses on backend correctness, data integrity, and real-world business logic, while delivering a clean, responsive UI with GST-compliant billing, stock tracking, and print-ready invoices.
+---
 
-Built as a production-style full-stack project using JavaScript end-to-end.
+## 🚀 Live Application
 
-⸻
+👉 https://invento-pro-2mfi.onrender.com
 
-✨ Why This Project Exists
+---
 
-Most inventory apps hide complexity behind frameworks.
-Invento Pro intentionally builds core systems from first principles:
-	•	Explicit session handling
-	•	Manual SQL queries
-	•	Deterministic stock accounting
-	•	Server-side rendering
-	•	Print-safe invoice generation
+## Overview
 
-This makes the project an excellent demonstration of backend engineering fundamentals rather than just UI composition.
+**Invento Pro** is a modern, full-stack Point-of-Sale and Inventory Management suite that unifies product cataloging, batch-wise stock valuation, margin tracking, GST-compliant billing, and A4 invoice generation into a single high-performance web application.
 
-⸻
+What sets Invento Pro apart is its **Dual-Environment Architecture** — a *write once, deploy anywhere* philosophy. In development, it binds to local PostgreSQL and processes assets locally for zero internet dependency. In production, it seamlessly auto-connects to **Neon Serverless PostgreSQL** and streams media assets to **Cloudinary CDN** — all without a single line of code change.
 
-🚀 Key Features
+---
 
-🔐 Authentication & Authorization
-	•	Secure login & signup
-	•	Password hashing with bcrypt
-	•	Session-based authentication
-	•	Role-based access control (Admin / User)
-	•	Server-enforced authorization (not UI-only)
+## Features
 
-⸻
+### Inventory Management
+- Batch-wise stock tracking — restock the same item at different purchase prices
+- Real-time stock level aggregation across all batches
+- Average purchase cost calculation for true profit margin analysis
+- Low-stock alerts and live stock validation
+- CSV export for Microsoft Excel analytics
 
-📦 Inventory Management
-	•	SKU + Category based item identification
-	•	Batch-based stock accounting
-	•	Accurate quantity aggregation across batches
-	•	Automatic stock deduction on billing
-	•	Profit calculation per item
-	•	Catalog visibility toggle
+### Billing & Invoicing
+- GST-compliant invoicing with variable tax matrices (CGST + SGST)
+- Line-item discount support with dynamic subtotal isolation
+- Auto-incrementing sequential invoice numbers tied to Financial Year (`INV-2023-2024-001`)
+- Print-optimized A4 layout via native `window.print()` — no external PDF library needed
+- Full billing history with reprint support
 
-⸻
+### POS Catalog Engine
+- Drag-and-drop cart drafting from the product catalog
+- Animated floating cart with `framer-motion` presence transitions
+- One-click checkout that routes cart state directly into the billing workflow
+- Catalog visibility toggle per product — publish or unpublish instantly
 
-🗂 Product Catalog
-	•	Customer-facing catalog view
-	•	Product image uploads (Cloudinary)
-	•	Image processing before storage (Sharp)
-	•	Clean separation between inventory & catalog
+### Customer Management
+- Customer details (name, phone, GST number, address) captured per invoice
+- Full billing history per customer
+- Customer search across sales records
 
-⸻
+### Sales Reporting
+- Date-range filtered revenue reports
+- Total GST collected, subtotal, and net revenue summaries
+- CSV export for external financial analysis
 
-🧾 Billing & Invoicing
-	•	GST-aware billing logic
-	•	Discount support per line item
-	•	CGST / SGST split (India-compliant)
-	•	Year-based auto invoice numbering
-	•	A4 / A5 invoice auto-selection
-	•	Print-optimized layouts (no browser hacks)
+### Security & Auth
+- Bcrypt salted password hashing — raw passwords never persisted
+- Server-side session storage backed by PostgreSQL (`connect-pg-simple`) — no memory leaks in production
+- Multi-tenant architecture — every query strictly scoped to `WHERE user_id = $x`
+- Role-based access control — Admin and standard user separation
+- Parameterized SQL queries throughout — zero SQL injection surface
 
-⸻
+---
 
-📊 Sales & Reports
-	•	Bill history
-	•	Sales summary with filters
-	•	CSV exports (sales, users, inventory)
-	•	Admin-only reporting & printing
+## Architecture
 
-⸻
+Invento Pro is structured as a **Monorepo** separating the frontend SPA from the backend Express API:
 
-🌗 UI & Experience
-	•	Light / Dark theme toggle
-	•	Responsive layouts
-	•	Dedicated print stylesheets
-	•	Minimal JS — logic lives where it belongs (server)
-
-⸻
-
-🛠 Tech Stack & Engineering Choices
-
-Language
-
-JavaScript
-Used across frontend and backend for:
-	•	Faster context switching
-	•	Shared data models
-	•	Consistent mental model
-	•	Production relevance
-
-⸻
-
-Backend
-
-🟢 Node.js
-Chosen for:
-	•	Non-blocking I/O (ideal for DB + file uploads)
-	•	Event-driven architecture
-	•	Mature ecosystem for web infrastructure
-	•	First-class JavaScript support
-
-🟢 Express.js
-Used instead of heavy frameworks because:
-	•	Explicit routing = better control
-	•	Middleware-driven design
-	•	Easy to reason about request lifecycle
-	•	Industry-standard for backend interviews
-
-⸻
-
-Database
-
-🟢 PostgreSQL (Render)
-Chosen over SQLite for:
-	•	ACID compliance
-	•	Concurrent writes
-	•	Production realism
-	•	Better data integrity guarantees
-
-Used with:
-	•	Manual SQL queries (no ORM abstraction)
-	•	Explicit joins and aggregates
-	•	Server-side validation
-
-⸻
-
-Sessions
-
-🟢 express-session + connect-pg-simple
-	•	Sessions stored in PostgreSQL
-	•	Stateless server restarts
-	•	Production-safe authentication
-	•	No JWT misuse for session problems
-
-⸻
-
-Image Storage
-
-🟢 Cloudinary + Sharp
-Why not local storage?
-	•	Render filesystem is ephemeral
-	•	Cloudinary provides CDN + persistence
-	•	Sharp ensures optimized image size
-	•	URLs stored in DB → scalable & portable
-
-⸻
-
-Frontend Rendering
-
-🟢 EJS (Instead of Static HTML or SPA)
-Why EJS?
-	•	Server-side rendering
-	•	Faster first paint
-	•	SEO-friendly
-	•	No client hydration complexity
-	•	Ideal for data-driven dashboards
-	•	Clean separation of logic & presentation
-
-This mirrors how many internal tools and enterprise dashboards are built, even today.
-
-⸻
-
-📁 Project Structure
-
+```
 InventoPro/
-├── server.js              # Express server & routes
-├── db.js                  # PostgreSQL init & queries
-├── cloudinary.js          # Cloudinary configuration
+├── backend/                        # Node.js / Express.js API server
+│   ├── server.js                   # Entry point, session config, route mounting
+│   ├── db.js                       # Auto-migration database initializer
+│   ├── routes/
+│   │   ├── auth.js                 # Register, login, logout
+│   │   ├── inventory.js            # Items, stock batches, image handling
+│   │   ├── billing.js              # Invoice generation, bill items
+│   │   ├── sales.js                # Reporting, CSV export
+│   │   ├── catalog.js              # Public catalog visibility
+│   │   └── admin.js                # User management
+│   └── public/uploads/             # Local media storage (dev only)
 │
-├── public/
-│   ├── css/               # Modular stylesheets
-│   ├── js/                # Page-specific frontend logic
-│   └── images/            # Static assets
-│
-├── views/                 # EJS templates
-│   ├── inventory.ejs
-│   ├── catalog.ejs
-│   ├── billing.ejs
-│   ├── bills.ejs
-│   ├── sales.ejs
-│   ├── admin.ejs
-│   ├── login.ejs
-│   ├── signup.ejs
-│   ├── bill-print-a4.ejs
-│   └── bill-print-a5.ejs
-│
-├── .env                   # Environment variables
-├── package.json
-├── README.md
-└── nodemon.json
+└── frontend/
+    └── unified-inventory-hub-main/ # Vite + React 18 (TypeScript) SPA
+        ├── src/
+        │   ├── pages/
+        │   │   ├── Inventory.tsx
+        │   │   ├── Billing.tsx
+        │   │   ├── Catalog.tsx
+        │   │   ├── Sales.tsx
+        │   │   └── Admin.tsx
+        │   ├── components/         # Shadcn UI + Radix UI primitives
+        │   └── lib/api.ts          # Axios instance with credentials
+        └── vite.config.ts
+```
 
+---
 
-⸻
+## Tech Stack
 
-▶️ Running Locally
+### Frontend
+| Technology | Purpose |
+|---|---|
+| React 18 + TypeScript | UI framework |
+| Vite | Build tool & dev server |
+| Tailwind CSS | Utility-first styling |
+| Shadcn UI + Radix UI | Accessible component primitives |
+| Framer Motion | Layout transitions & micro-interactions |
+| React Router DOM | Client-side routing with state propagation |
+| Axios | HTTP client with secure credential handling |
+| Lucide React | Standardized icon vectors |
 
+### Backend
+| Technology | Purpose |
+|---|---|
+| Node.js + Express.js | Server framework |
+| PostgreSQL (`pg`) | Relational database with connection pooling |
+| express-session + connect-pg-simple | DB-backed session storage |
+| bcrypt | Salted password hashing |
+| multer | Multipart file upload interception |
+| sharp | EXIF stripping, image optimization & compression |
+| dotenvx | Environment variable management |
+
+### Cloud (Production)
+| Service | Purpose |
+|---|---|
+| Neon Serverless PostgreSQL | Production database |
+| Cloudinary CDN | Optimized media asset delivery |
+
+---
+
+## How the Dual-Environment System Works
+
+```
+                        ┌─────────────────────────────────────────────────────────┐
+                        │                    npm run dev                          │
+                        │              NODE_ENV = development                     │
+                        │                                                         │
+                        │  PostgreSQL (local) ◄──► Express API ◄──► Vite SPA      │
+                        │  Images → /backend/public/uploads (local filesystem)    │
+                        │  Sessions → Local PostgreSQL session table              │
+                        └─────────────────────────────────────────────────────────┘
+
+                        ┌─────────────────────────────────────────────────────────┐
+                        │                    npm start                            │
+                        │               NODE_ENV = production                     │
+                        │                                                         │
+                        │  Neon PostgreSQL ◄──► Express API ◄──► React SPA        │
+                        │  Images → Cloudinary CDN (auto-streamed)                │
+                        │  Sessions → Neon PostgreSQL session table               │
+                        └─────────────────────────────────────────────────────────┘
+```
+
+Zero code changes required between environments. The backend detects `NODE_ENV` and auto-routes all database connections and media uploads accordingly.
+
+---
+
+## Database — Zero Setup Required
+
+On every boot, `initDb()` runs automatically and:
+
+1. Validates `DATABASE_URL` (Neon) or falls back to local `PGDATABASE`
+2. Creates the `invento` database if the environment is fresh
+3. Runs schema migrations — checks and creates all tables and column constraints automatically
+4. Wires all `FOREIGN KEY` relationships scoped to the authenticated user context
+
+**You never need to run a SQL migration script manually.**
+
+---
+
+## Getting Started
+
+### Prerequisites
+- Node.js v18+
+- PostgreSQL (local development)
+- npm
+
+### 1. Clone the repository
+```bash
+git clone https://github.com/mayank-gupta-develop/invento-pro.git
+cd invento-pro
+```
+
+### 2. Install dependencies
+```bash
 npm install
+npm --prefix backend install
+npm --prefix frontend/unified-inventory-hub-main install
+```
+
+### 3. Configure environment variables
+
+Create `backend/.env`:
+```env
+NODE_ENV=development
+PGDATABASE=inventopro
+PGUSER=postgres
+PGPASSWORD=your_password
+PGHOST=localhost
+PGPORT=5432
+SESSION_SECRET=your_session_secret
+```
+
+For production, add:
+```env
+NODE_ENV=production
+DATABASE_URL=your_neon_connection_string
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
+```
+
+### 4. Start PostgreSQL (macOS)
+```bash
+brew services start postgresql@18
+```
+
+### 5. Run the application
+```bash
 npm run dev
+```
 
-App runs at:
+| Service | URL |
+|---|---|
+| Backend API | http://localhost:3000 |
+| Frontend SPA | http://localhost:8080 |
 
-http://localhost:3000
+---
 
+## Key Design Decisions
 
-⸻
+**Why batch-based stock instead of a single quantity field?**  
+Physical supply chains don't work with a single number. Invento Pro models each restock as a separate batch with its own purchase price, allowing the system to calculate true average cost and real profit margins — not just stock count.
 
-☁️ Deployment (Render)
-	•	Render Web Service (Node)
-	•	Render PostgreSQL
-	•	Cloudinary for image storage
-	•	Environment variables configured in Render dashboard
+**Why PostgreSQL-backed sessions instead of in-memory?**  
+Memory-based sessions crash under load and are wiped on server restart. By storing sessions in the same PostgreSQL instance, Invento Pro supports clustering, zero-downtime deploys, and horizontal scaling without session loss.
 
-⚠️ No reliance on local filesystem persistence.
+**Why client-side billing math?**  
+GST calculations, discount deductions, and subtotal isolation all run on the browser. This keeps server load minimal and ensures the UI is fully responsive and interactive without round-trip latency on every keystroke.
 
-⸻
+**Why `sharp` before storage?**  
+Every uploaded product image is automatically stripped of EXIF metadata, resized, and compressed before it ever touches the filesystem or Cloudinary. This protects user privacy, reduces storage costs, and ensures consistent image dimensions across the catalog.
 
-🔒 Security Considerations
-	•	Password hashing with bcrypt
-	•	Parameterized SQL queries
-	•	Server-side authorization checks
-	•	Session cookies with proper flags
-	•	Admin routes protected at middleware level
+---
 
-⸻
+## API Reference
 
-📌 Future Enhancements
-	•	PDF invoice generation
-	•	Analytics dashboard
-	•	Multi-store support
-	•	Role-based permissions
-	•	API rate limiting
-	•	Dockerized deployment
-	•	Automated tests
+### Auth
+| Method | Endpoint | Description |
+|---|---|---|
+| POST | `/api/auth/register` | Register new user |
+| POST | `/api/auth/login` | Login |
+| POST | `/api/auth/logout` | Logout and destroy session |
 
-⸻
+### Inventory
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/api/inventory/items` | Get all items with stock totals |
+| POST | `/api/inventory/items` | Add new item with optional image |
+| PUT | `/api/inventory/items/:id` | Update item details |
+| DELETE | `/api/inventory/items/:id` | Delete item |
+| POST | `/api/inventory/items/:id/stock` | Add stock batch |
 
-👤 Author
+### Billing
+| Method | Endpoint | Description |
+|---|---|---|
+| POST | `/api/billing/bills` | Create invoice and deduct stock |
+| GET | `/api/billing/bills` | Get all bills |
+| GET | `/api/billing/bills/:id` | Get single bill with line items |
 
-Mayank Gupta
-GitHub: https://github.com/mayank-gupta-develop
+### Sales
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/api/sales/report` | Sales report with date filter |
+| GET | `/api/sales/export` | CSV export |
 
-⸻
+### Catalog
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/api/catalog` | Get all catalog-visible items |
+| PUT | `/api/catalog/:id/toggle` | Toggle catalog visibility |
 
-📄 License
+---
 
-Educational & portfolio use only.
+## License
 
-⸻
+MIT License — see [LICENSE](LICENSE) for details.
+
+---
+
+## Author
+
+**Mayank Gupta**  
+BBA-IT — St. Joseph's Degree & PG College, Hyderabad  
+H.T. No: 121423408005
+
+---
+
+*Invento Pro — Built for businesses that can't afford to get inventory wrong.*

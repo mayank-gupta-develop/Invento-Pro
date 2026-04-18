@@ -1,0 +1,32 @@
+CREATE TABLE IF NOT EXISTS users (
+id SERIAL PRIMARY KEY,
+name TEXT,
+email TEXT UNIQUE,
+password TEXT,
+role TEXT DEFAULT 'user',
+status TEXT DEFAULT 'active',
+created_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS inventory (
+id SERIAL PRIMARY KEY,
+name TEXT,
+sku TEXT,
+price NUMERIC,
+quantity INTEGER,
+created_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS bills (
+id SERIAL PRIMARY KEY,
+customer TEXT,
+total NUMERIC,
+created_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS sales (
+id SERIAL PRIMARY KEY,
+product TEXT,
+amount NUMERIC,
+created_at TIMESTAMP DEFAULT NOW()
+);
