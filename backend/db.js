@@ -13,18 +13,33 @@ dotenv.config({ quiet: true });
 const targetDb = process.env.PGDATABASE || "invento";
 
 const ensureString = (val) => String(val ?? "");
+const isTruthy = (val) => ["1", "true", "yes", "on"].includes(String(val ?? "").toLowerCase());
+
+function resolveSslConfig(connectionUrl) {
+  const sslMode = connectionUrl?.searchParams.get("sslmode");
+
+  if (isTruthy(process.env.DB_SSL)) {
+    return { rejectUnauthorized: false };
+  }
+
+  if (sslMode && sslMode !== "disable") {
+    return { rejectUnauthorized: false };
+  }
+
+  if (process.env.NODE_ENV === "production" && process.env.DATABASE_URL) {
+    return { rejectUnauthorized: false };
+  }
+
+  return false;
+}
 
 let poolConfig;
 
 if (process.env.DATABASE_URL) {
   const url = new URL(process.env.DATABASE_URL);
   poolConfig = {
-    host: ensureString(url.hostname) || "localhost",
-    port: url.port ? Number(url.port) : 5432,
-    user: ensureString(url.username) || undefined,
-    password: ensureString(url.password || process.env.PGPASSWORD),
-    database: url.pathname ? url.pathname.slice(1) : undefined,
-    ssl: process.env.DB_SSL === "true" ? { rejectUnauthorized: false } : false
+    connectionString: process.env.DATABASE_URL,
+    ssl: resolveSslConfig(url)
   };
 } else {
   poolConfig = {
@@ -33,6 +48,7 @@ if (process.env.DATABASE_URL) {
     user: ensureString(process.env.PGUSER) || "postgres",
     password: ensureString(process.env.PGPASSWORD),
     database: targetDb,
+    ssl: resolveSslConfig(),
   };
 }
 
@@ -40,6 +56,10 @@ export const pool = new Pool(poolConfig);
 export const query = (text, params = []) => pool.query(text, params);
 
 async function bootstrapDatabase() {
+  if (process.env.DATABASE_URL) {
+    return;
+  }
+
   const bootstrapConfig = { ...poolConfig, database: "postgres" };
   const client = new Client(bootstrapConfig);
   
