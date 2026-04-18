@@ -20,15 +20,14 @@ import adminRouter from "./routes/admin.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-dotenv.config({ path: path.join(__dirname, "..", ".env") });
-dotenv.config();
+dotenv.config({ path: path.join(__dirname, "..", ".env"), quiet: true });
+dotenv.config({ quiet: true });
 
 // Initialize Database before anything else
 try {
   await initDb();
-  console.log("✅ Database initialized successfully.");
 } catch (err) {
-  console.error("❌ Database initialization failed:", err);
+  console.error("Database initialization failed:", err);
   process.exit(1);
 }
 
@@ -107,6 +106,5 @@ if (process.env.NODE_ENV === "production") {
 }
 
 app.listen(PORT, () => {
-  console.log(`✅ Invento Pro running on port ${PORT}`);
-  console.log(`🌐 API Base: http://localhost:${PORT}/api`);
+  console.log(`Invento Pro listening on ${PORT}`);
 });

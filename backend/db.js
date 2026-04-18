@@ -7,8 +7,8 @@ const { Pool, Client } = pkg;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-dotenv.config({ path: path.join(__dirname, "..", ".env") });
-dotenv.config();
+dotenv.config({ path: path.join(__dirname, "..", ".env"), quiet: true });
+dotenv.config({ quiet: true });
 
 const targetDb = process.env.PGDATABASE || "invento";
 
@@ -48,12 +48,10 @@ async function bootstrapDatabase() {
     const res = await client.query("SELECT 1 FROM pg_database WHERE datname = $1", [targetDb]);
     
     if (res.rowCount === 0) {
-      console.log(`Database "${targetDb}" does not exist. Creating...`);
       await client.query(`CREATE DATABASE ${targetDb}`);
-      console.log(`Database "${targetDb}" created successfully.`);
     }
   } catch (err) {
-    console.warn("Bootstrap database warning (might not have permissions):", err.message);
+    console.warn("Database bootstrap warning:", err.message);
   } finally {
     await client.end();
   }
@@ -65,7 +63,6 @@ export async function initDb() {
     await bootstrapDatabase();
 
     await pool.query("SELECT 1");
-    console.log("Postgres connected");
 
     // 1. Create Tables
     await pool.query(`
@@ -207,8 +204,6 @@ export async function initDb() {
         END IF;
       END $$;
     `);
-
-    console.log("Database schema verified.");
   } catch (err) {
     console.error("Database connection/init error:", err);
     throw err;

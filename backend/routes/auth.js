@@ -7,7 +7,6 @@ const router = express.Router();
 
 // ISSUE 2 — CREATE AUTH ROUTES
 router.post("/login", async (req, res) => {
-  console.log("login request received");
   const { email, password } = req.body;
 
   try {
