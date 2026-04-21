@@ -7,7 +7,7 @@
 
 ## 🚀 Live Application
 
-👉 https://invento-pro-2mfi.onrender.com
+👉 https://invento-pro-p0pm.onrender.com
 
 ---
 
